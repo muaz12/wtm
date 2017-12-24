@@ -1,18 +1,47 @@
 <ion-header>
   <ion-navbar>
     <ion-title class="turbidity-icon">
-        
+        Water Turbidity Meter
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="master">
-  <h2>Welcome to Ionic!</h2>
-    <button ion-button color="dark" (click)="opencamera()">{{myVariable}}</button>
-    <br>
-    <img id="ntu" src="../assets/imgs/Ntu99.5.jpg" >
-    <canvas id="myCanvas" style="border:1px solid #d3d3d3;"></canvas>
-    <p>length {{greyscaleStr}}</p>
-    <p>image Width : {{imgwidth}}</p>
-    <p>image height : {{imgheight}}</p>
+  <ion-item></ion-item>
+  <ion-item>
+    <button ion-button full color="secondary" large (click)="takePhoto()">
+      <div>
+        <ion-icon name="camera" ></ion-icon>
+        <label>&nbsp; Capture Water Sample</label>
+      </div>
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <button ion-button full color="secondary" large>
+      <div>
+        <ion-icon name="md-albums" ></ion-icon>
+        <label>&nbsp; Select Image From <br>Gallery</label>
+      </div>
+    </button>
+  </ion-item>
+  <ion-item>
+    <button ion-button full color="secondary" large>
+      <div>
+        <ion-icon name="cog" ></ion-icon>
+        <label>&nbsp; Calibration</label>
+      </div>
+    </button>
+  </ion-item>
+  <ion-footer>
+    <ion-toolbar>
+      <button ion-button full color="dark" large>
+        <div>
+          <ion-icon name="swap"></ion-icon>
+          <label>&nbsp; Previous Results</label>
+        </div>
+      </button>
+    </ion-toolbar>
+  </ion-footer>
+  
 </ion-content>

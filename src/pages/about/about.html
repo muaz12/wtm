@@ -1,11 +1,21 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      About
+      Process
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+    <ion-card>
+      <div class="col col-33">
+        <img  class="full-image" src="../assets/imgs/Ntu10.0.jpg"/>
+        <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
+      </div>
+      </ion-card>
+      <ion-footer>
+        <ion-toolbar>
+          <button ion-button block color="dark" large (click)="opencamera()">Start</button>
+        </ion-toolbar>
+      </ion-footer>
 </ion-content>
