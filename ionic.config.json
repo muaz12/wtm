@@ -1,6 +1,6 @@
 {
   "name": "Water_Turbidity_Meter",
-  "app_id": "",
+  "app_id": "a80a7fdb",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
