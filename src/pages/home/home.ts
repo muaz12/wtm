@@ -29,4 +29,15 @@ export class HomePage {
       console.log(err);
     });
   }
+
+  openGallery(){
+    this.camera.getPicture({
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+      destinationType: this.camera.DestinationType.DATA_URL
+     }).then((imageData) => {
+       this.base64Image = 'data:image/jpeg;base64,'+imageData;
+      }, (err) => {
+       console.log(err);
+     });
+   }
 }

@@ -7,15 +7,12 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-card>
+    <ion-card >
       <div class="col col-33">
-        <img  class="full-image" src="../assets/imgs/Ntu10.0.jpg"/>
+        <img  class="full-image" src="{{pathForImage(lastImage)}}" style="width: 100%" [hidden]="lastImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
       </div>
       </ion-card>
-      <ion-footer>
-        <ion-toolbar>
-          <button ion-button block color="dark" large (click)="opencamera()">Start</button>
-        </ion-toolbar>
-      </ion-footer>
+      <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
+      <button ion-button block color="dark" large (click)="calculate()">Start</button>
 </ion-content>
