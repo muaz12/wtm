@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
@@ -26,7 +27,11 @@ import { Camera } from '@ionic-native/camera';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{tabsPlacement:'top'})
+    IonicModule.forRoot(MyApp,{tabsPlacement:'top'}),
+    IonicStorageModule.forRoot({
+      name: 'WTMDatabase',
+         driverOrder: ['sqlite']
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,7 +43,8 @@ import { Camera } from '@ionic-native/camera';
   ],
   providers: [
     StatusBar,
-    SplashScreen, File,
+    SplashScreen, 
+    File,
     Transfer,
     Camera,
     FilePath,
