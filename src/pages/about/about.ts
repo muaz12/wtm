@@ -80,7 +80,7 @@ export class AboutPage {
     var options = {
       quality: 100,
       sourceType: sourceType,
-      saveToPhotoAlbum: true,
+      saveToPhotoAlbum: false,
       correctOrientation: true
     };
    
@@ -93,8 +93,10 @@ export class AboutPage {
             let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
             let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
             this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+            this.presentToast('Gallery');
           });
       } else {
+        this.presentToast('Camera');
         var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
@@ -113,38 +115,37 @@ export class AboutPage {
   private createFileName() {
     var d = new Date(),
     n = d.getTime(),
-    newFileName =  n;
+    newFileName =  n + '.jpg';
     return newFileName;
   }
 
   
   /** 
    * Method Name   : copyFileToLocalDir(namePath, currentName, newFileName)
-   * Purpose       : to transfer image to Application Directory
+   * Purpose       : to copy image file to Application Directory
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   private copyFileToLocalDir(namePath, currentName, newFileName) {
     this.createDirectory();
-    //var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Water images';
-    this.file.copyFile(namePath, currentName, cordova.file.externalRootDirectory, newFileName).then(success => {
+    var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/';
+    this.file.copyFile(namePath, currentName, path, newFileName).then(success => {
       this.lastImage = newFileName;
     }, error => {
-      this.presentToast('Error while storing file.');
+      this.presentToast('Error while storing image ');
     });
   }
 
 
   /** 
    * Method Name   : checkDirectory()
-   * Purpose       : to check whether directory "Water Turbidity Meter/Water images" already exists in the 
+   * Purpose       : to check whether directory "Water Turbidity Meter" already exists in the 
    *                 application directory or not. Return false if the directory does not exist.
    * Trigger when  : invoked by createDirectory()
   **/
   public checkDirectory(){
-    this.file.checkDir(cordova.file.externalRootDirectory, "Water Turbidity Meter/Water images/").then(_ => {
+    this.file.checkDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter').then(_ => {
       return true;
     }, (err) => {
-      this.presentToast(' ' + err);
       return false;
     });
   }
@@ -152,18 +153,24 @@ export class AboutPage {
 
   /** 
    * Method Name   : createDirectory()
-   * Purpose       : to create directory "Water Turbidity Meter/Water images" if checkDirectory() returns 
-   *                 false which means the directory need to be created since it does not exist.
+   * Purpose       : to create directory "Water Turbidity Meter, Images & Databases" if checkDirectory() 
+   *                 returns false which means the directory need to be created since it does not exist.
    * Trigger when  : invoked by copyFileToLocalDir(namePath, currentName, newFileName)
   **/
   public createDirectory() {
     if(!this.checkDirectory()) {
-      this.file.createDir(cordova.file.externalRootDirectory, "Water Turbidity Meter/Water images/", false).then(_ => console.log('Directory exists')
-      ).catch(err => {
-        console.log(err);
-        var error = JSON.stringify(err);
-        this.presentToast(' ' + error);
-      });
+      //create directory Water Turbidity Meter
+      this.file.createDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter', true).then(_ => {
+      
+        //create directory Images
+        var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/';
+        this.file.createDir(path, 'Images', true).then(_ => {}).catch(err => {});
+
+        //create directory Databases
+        var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/';
+        this.file.createDir(path, 'Databases', true).then(_ => {}).catch(err => {});
+
+      }).catch(err => {var error = JSON.stringify(err);});
     }
   }
   
@@ -177,8 +184,8 @@ export class AboutPage {
     if (img === null) {
       return '';
     } else {
-      this.gPath = cordova.file.externalRootDirectory + img;
-      return cordova.file.externalRootDirectory + img;
+      this.gPath = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/' + img;
+      return this.gPath;
     }
   }
 
