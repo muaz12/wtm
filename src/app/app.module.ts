@@ -1,11 +1,10 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicStorageModule } from '@ionic/storage';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { AboutPage } from '../pages/about/about';
-import { ContactPage } from '../pages/contact/contact';
+import { ProcessPage } from '../pages/process/process';
+import { ResultPage } from '../pages/result/result';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -16,28 +15,29 @@ import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
+import { SQLite } from '@ionic-native/sqlite';
+import { Geolocation } from '@ionic-native/geolocation';
+
+import { LocationHandler } from '../classes/LocationHandler';
+import { DatabaseHandler } from '../classes/DatabaseHandler';
 
 @NgModule({
   declarations: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    ProcessPage,
+    ResultPage,
     HomePage,
     TabsPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp,{tabsPlacement:'top'}),
-    IonicStorageModule.forRoot({
-      name: 'WTMDatabase',
-         driverOrder: ['sqlite']
-    })
+    IonicModule.forRoot(MyApp,{tabsPlacement:'top'})
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    AboutPage,
-    ContactPage,
+    ProcessPage,
+    ResultPage,
     HomePage,
     TabsPage
   ],
@@ -47,6 +47,11 @@ import { Camera } from '@ionic-native/camera';
     File,
     Transfer,
     Camera,
+    SQLite,
+    Geolocation,
+    LocationHandler,
+    DatabaseHandler,
+    ProcessPage,
     FilePath,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
