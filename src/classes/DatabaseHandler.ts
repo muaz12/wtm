@@ -3,36 +3,38 @@
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 import { ProcessPage } from '../pages/process/process'
 import { Dates } from './Dates'
+import { LocationHandler } from './LocationHandler'
 
 //CLASS
 export class DatabaseHandler {
   
   //VARIABLE
-  sqlite;
-  dates;
-  static dateObject: DatabaseHandler;
+  static databaseObject: DatabaseHandler;
+  datesObject = Dates.getInstance();
+  locationObject = LocationHandler.getInstance();
+  log = '';
 
-
-  //CONSTRUCTOR
-  constructor() { 
-    this.dates = new Dates();
-    this.sqlite = new SQLite();
-  }
-
-  getSQLite() {
-    return new SQLite();
-  }
   
   /** 
    * Method Name   : getInstance()
-   * Purpose       : to get the instance of Dates class
+   * Purpose       : to get the instance of DatabaseHandler class
    * Trigger when  : invoked by ProcessPage 
    **/
   public static getInstance() {
-    if(!this.dateObject){
-      this.dateObject = new DatabaseHandler();
+    if(!this.databaseObject){
+      this.databaseObject = new DatabaseHandler();
     }
-    return this.dateObject;
+    return this.databaseObject;
+  }
+
+
+  /** 
+   * Method Name   : getInstance()
+   * Purpose       : to get the instance of SQLite class
+   * Trigger when  : invoked by openDatabase() 
+   **/
+  getSQLite() {
+    return new SQLite();
   }
 
 
@@ -43,7 +45,8 @@ export class DatabaseHandler {
    *                 deleteData()
    **/
   public openDatabase() {
-    return this.sqlite.create({name: 'WTMDatabase.db', location: 'default'});
+    this.log = this.log + 'passed openDatabase';
+    return this.getSQLite().create({name: 'WTMDatabase.db', location: 'default'});
   }
 
 
@@ -54,10 +57,18 @@ export class DatabaseHandler {
    **/
   public createTable() {
     this.openDatabase().then((db: SQLiteObject) => {
+      this.log = this.log + 'passed createTable';
       var sqlStatement = 'CREATE TABLE IF NOT EXISTS result(user VARCHAR(32), ntu DOUBLE(20,10), latitude DOUBLE(20,10), longitude DOUBLE(20,10), date DOUBLE(20,0), url VARCHAR(32))';
-      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement'))
+      db.executeSql(sqlStatement, {}).then(() => {
+        this.log = this.log + 'passed Executed sql create statement';
+        console.log('Executed sql create statement');
+      })
       .catch(e => console.log(e));
      }).catch(e => console.log(e));
+  }
+
+  public getLog() {
+    return this.log;
   }
 
 
@@ -76,7 +87,7 @@ export class DatabaseHandler {
 
 
   /** 
-   * Method Name   : read()
+   * Method Name   : readData()
    * Purpose       : to read the data inside table "result"
    * Trigger when  : invoked by 
    **/
@@ -86,6 +97,7 @@ export class DatabaseHandler {
       db.executeSql('SELECT * FROM result', {}).then((data) => {
         console.log('Executed sql statement read');
         if (data.rows.length > 0) {
+          this.log = this.log + 'passed Executed sql select statement';
           for (var i = 0; i < data.rows.length; i++) {
             data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
                         long: data.rows.item(i).longitude, date: data.rows.item(i).date, 
@@ -108,9 +120,12 @@ export class DatabaseHandler {
     var user = 'Syazani';
     
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+1+', '+1+', 123, "bbb")';
+      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationObject.getLatitude+', '+this.locationObject.getLongitude+', '+this.datesObject.date+', "bbb")';
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql insert statement'))
+        .then(() => {
+          this.log = this.log + 'passed Executed sql insert statement';
+          console.log('Executed sql insert statement');
+        })
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
@@ -125,7 +140,10 @@ export class DatabaseHandler {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'UPDATE result SET ntu = '+value+' WHERE latitude = 123.432';
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql update statement'))
+        .then(() => {
+          console.log('Executed sql update statement');
+          this.log = this.log + 'passed Executed sql update statement';
+        })
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
@@ -140,7 +158,10 @@ export class DatabaseHandler {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'DELETE FROM result WHERE latitude = 123.432';
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql delete statement'))
+        .then(() => {
+          console.log('Executed sql delete statement');
+          this.log = this.log + 'passed Executed sql delete statement';
+        })
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }

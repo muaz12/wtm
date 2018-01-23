@@ -3,32 +3,10 @@
 export class Dates {
 
   //VARIABLES
-  date: any;
   static dateObject: Dates;
+  date: any;
+  log = '';
   
-
-  /** 
-   * Method Name   : getDates()
-   * Purpose       : to get current date
-   * Trigger when  : invoked by ProcessPage createFileName()
-   **/
-  public getDates() {
-    var d = new Date();
-    this.date = d.getTime();
-    console.log('ffffff');
-    return this.date;
-  }
-
-
-  /** 
-   * Method Name   : computeDatesDifference()
-   * Purpose       : to get the time interval between current date with the stored date in database
-   * Trigger when  : invoked by 
-   **/
-  public computeDatesDifference() {
-    return 0;
-  }
-
 
   /** 
    * Method Name   : getInstance()
@@ -40,5 +18,31 @@ export class Dates {
       this.dateObject = new Dates();
     }
     return this.dateObject;
+  }
+
+
+  /** 
+   * Method Name   : getDates()
+   * Purpose       : to get current date
+   * Trigger when  : invoked by ProcessPage createFileName()
+   **/
+  public getDates() {
+    var d = new Date();
+    this.date = d.getTime();
+    this.log = this.log + 'passed getDates';
+    return this.date;
+  }
+
+  public getLog() {
+    return this.log;
+  }
+
+  /** 
+   * Method Name   : computeDatesDifference()
+   * Purpose       : to get the time interval between current date with the stored date in database
+   * Trigger when  : invoked by 
+   **/
+  public computeDatesDifference() {
+    return 0;
   }
 }

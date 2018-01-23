@@ -31,7 +31,7 @@ export class ProcessPage {
   result:string = 'null';
   gPath: string = 'null';
   errorLog: string = this.datesss.getDates();
-  data: string = 'null';
+  data: string = '';
 
 
   //CONSTRUCTOR
@@ -43,8 +43,15 @@ export class ProcessPage {
                 //this.databaseHandler.createTable();
                 //.createTable();
                 //new DatabaseHandler().createTable();
+                
               }
   
+
+  public updateLog() {
+    this.data = this.data + ', ' + this.datesss.getLog();
+    this.data = this.data + ', ' + this.databasessss.getLog();
+  }
+
 
   /** 
    * Method Name   : checkDirectory()
