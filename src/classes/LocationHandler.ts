@@ -17,7 +17,7 @@ export class LocationHandler {
     return 123.432;
   }
 
-
+ 
   /** 
    * Method Name   : getLongitude()
    * Purpose       : to get the longitude of device's position

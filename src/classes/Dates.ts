@@ -1,29 +1,21 @@
 
 //CLASS
-class Dates {
+export class Dates {
 
   //VARIABLES
   date: any;
-
+  static dateObject: Dates;
+  
 
   /** 
    * Method Name   : getDates()
    * Purpose       : to get current date
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by ProcessPage createFileName()
    **/
   public getDates() {
     var d = new Date();
     this.date = d.getTime();
-    return this.date;
-  }
-
-
-  /** 
-   * Method Name   : getDate()
-   * Purpose       : to get variable date
-   * Trigger when  : invoked by DatabaseHandler insertData(ntu)
-   **/
-  public getDate() {
+    console.log('ffffff');
     return this.date;
   }
 
@@ -35,5 +27,18 @@ class Dates {
    **/
   public computeDatesDifference() {
     return 0;
+  }
+
+
+  /** 
+   * Method Name   : getInstance()
+   * Purpose       : to get the instance of Dates class
+   * Trigger when  : invoked by ProcessPage 
+   **/
+  public static getInstance() {
+    if(!this.dateObject){
+      this.dateObject = new Dates();
+    }
+    return this.dateObject;
   }
 }

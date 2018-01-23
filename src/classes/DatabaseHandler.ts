@@ -1,20 +1,41 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { LocationHandler } from './LocationHandler'
+import { ProcessPage } from '../pages/process/process'
+import { Dates } from './Dates'
 
 //CLASS
 export class DatabaseHandler {
+  
+  //VARIABLE
+  sqlite;
+  dates;
+  static dateObject: DatabaseHandler;
+
 
   //CONSTRUCTOR
-  constructor(private sqlite: SQLite, private locationHandler: LocationHandler) { }
+  constructor() { 
+    this.dates = new Dates();
+    this.sqlite = new SQLite();
+  }
+
+  getSQLite() {
+    return new SQLite();
+  }
+  
+  /** 
+   * Method Name   : getInstance()
+   * Purpose       : to get the instance of Dates class
+   * Trigger when  : invoked by ProcessPage 
+   **/
+  public static getInstance() {
+    if(!this.dateObject){
+      this.dateObject = new DatabaseHandler();
+    }
+    return this.dateObject;
+  }
 
 
-  //VARIABLE
-  private dates: Dates = new Dates();
-  date: string = this.dates.getDate();
-  
-  
   /** 
    * Method Name   : openDatabase()
    * Purpose       : to open database named "WTMDatabase.db"
@@ -87,7 +108,7 @@ export class DatabaseHandler {
     var user = 'Syazani';
     
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationHandler.getLatitude()+', '+this.locationHandler.getLongitude()+', '+this.date+', "'+this.url+'")';
+      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+1+', '+1+', 123, "bbb")';
       db.executeSql(sqlStatement, {})
         .then(() => console.log('Executed sql insert statement'))
         .catch(e => console.log(e));

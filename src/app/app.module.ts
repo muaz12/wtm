@@ -18,9 +18,6 @@ import { Camera } from '@ionic-native/camera';
 import { SQLite } from '@ionic-native/sqlite';
 import { Geolocation } from '@ionic-native/geolocation';
 
-import { LocationHandler } from '../classes/LocationHandler';
-import { DatabaseHandler } from '../classes/DatabaseHandler';
-
 @NgModule({
   declarations: [
     MyApp,
@@ -49,9 +46,6 @@ import { DatabaseHandler } from '../classes/DatabaseHandler';
     Camera,
     SQLite,
     Geolocation,
-    LocationHandler,
-    DatabaseHandler,
-    ProcessPage,
     FilePath,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

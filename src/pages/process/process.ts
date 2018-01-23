@@ -8,8 +8,9 @@ import { ActionSheetController, ToastController, Platform, LoadingController, Lo
 import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
+import { Dates } from '../../classes/Dates';
+import { DatabaseHandler } from '../../classes/DatabaseHandler';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-
 declare var cordova: any;
 
 //COMPONENT
@@ -17,28 +18,31 @@ declare var cordova: any;
   selector: 'page-process',
   templateUrl: 'process.html'
 })
-
+ 
 //CLASS
 export class ProcessPage {
 
   //VARIABLE
+  datesss = Dates.getInstance();
+  databasessss = DatabaseHandler.getInstance();
   lastImage: string = null;
   loading: Loading;
   ntu:number = 0;
   result:string = 'null';
   gPath: string = 'null';
-  errorLog: string = 'null';
+  errorLog: string = this.datesss.getDates();
   data: string = 'null';
-  dates:number = 0;
-  
+
 
   //CONSTRUCTOR
-  constructor(public navCtrl: NavController, private camera: Camera, 
-              private transfer: Transfer, private file: File, private filePath: FilePath, 
-              public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, 
-              public platform: Platform, public loadingCtrl: LoadingController, private sqlite: SQLite) { 
-                this.createDirectory();
-                this.create();
+  constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
+              private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
+              public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
+              private sqlite: SQLite) { 
+                //this.createDirectory();
+                //this.databaseHandler.createTable();
+                //.createTable();
+                //new DatabaseHandler().createTable();
               }
   
 
@@ -149,7 +153,7 @@ export class ProcessPage {
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   private createFileName() {
-    var date = this.getDates();
+    var date = 'vvv';
     return date + '.jpg';
   }
 
