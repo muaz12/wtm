@@ -99,6 +99,7 @@ export class DatabaseHandler {
         if (data.rows.length > 0) {
           this.log = this.log + 'passed Executed sql select statement';
           for (var i = 0; i < data.rows.length; i++) {
+            this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
             data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
                         long: data.rows.item(i).longitude, date: data.rows.item(i).date, 
                         url: data.rows.item(i).url 
@@ -107,7 +108,8 @@ export class DatabaseHandler {
         }
       }).catch(e => console.log(e));
     }).catch(e => console.log(e));
-    return data;
+    
+    //return data;
   }
 
 
@@ -120,7 +122,7 @@ export class DatabaseHandler {
     var user = 'Syazani';
     
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationObject.getLatitude+', '+this.locationObject.getLongitude+', '+this.datesObject.date+', "bbb")';
+      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationObject.getLatitude()+', '+this.locationObject.getLongitude()+', '+this.datesObject.date+', "bbb")';
       db.executeSql(sqlStatement, {})
         .then(() => {
           this.log = this.log + 'passed Executed sql insert statement';

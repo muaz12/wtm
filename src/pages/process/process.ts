@@ -28,9 +28,7 @@ export class ProcessPage {
   lastImage: string = null;
   loading: Loading;
   ntu:number = 0;
-  result:string = 'null';
   gPath: string = 'null';
-  errorLog: string = this.datesss.getDates();
   data: string = '';
 
 
@@ -39,11 +37,7 @@ export class ProcessPage {
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
               private sqlite: SQLite) { 
-                //this.createDirectory();
-                //this.databaseHandler.createTable();
-                //.createTable();
-                //new DatabaseHandler().createTable();
-                
+                this.createDirectory();
               }
   
 
@@ -160,7 +154,7 @@ export class ProcessPage {
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   private createFileName() {
-    var date = 'vvv';
+    var date = this.datesss.getDates();
     return date + '.jpg';
   }
 
