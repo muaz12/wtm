@@ -1,17 +1,18 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { Path } from './Path'
-import { Dates } from './Dates'
-import { LocationHandler } from './LocationHandler'
+import { LocationHandler } from './LocationHandler';
+import { Dates } from './Dates';
+import { Path } from './Path';
+
 
 //CLASS
 export class DatabaseHandler {
   
   //VARIABLE
   static databaseObject: DatabaseHandler;
-  datesObject = Dates.getInstance();
   locationObject = LocationHandler.getInstance();
+  datesObject = Dates.getInstance();
   pathObject = Path.getInstance();
   log = '';
 
@@ -30,7 +31,7 @@ export class DatabaseHandler {
 
 
   /** 
-   * Method Name   : getInstance()
+   * Method Name   : getSQLite()
    * Purpose       : to get the instance of SQLite class
    * Trigger when  : invoked by openDatabase() 
    **/

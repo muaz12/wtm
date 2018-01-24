@@ -27,10 +27,13 @@ export class ProcessPage {
   datesObject = Dates.getInstance();
   databaseObject = DatabaseHandler.getInstance();
   pathObject = Path.getInstance();
+  lastImage: string = null;
   loading: Loading;
   ntu:number = 0;
   gPath: string = 'null';
+  directory: string = '';
   data: string = '';
+  url;
 
 
   //CONSTRUCTOR
@@ -45,6 +48,7 @@ export class ProcessPage {
     this.data = this.data + ', ' + this.datesObject.getLog();
     this.data = this.data + ', ' + this.databaseObject.getLog();
     this.data = this.data + ', ' + this.pathObject.getLog();
+    this.directory = this.directory + ', ' + this.pathObject.pathForImage() + ', ' + this.url;
   }
 
 
@@ -156,7 +160,8 @@ export class ProcessPage {
   **/
   private createFileName() {
     var date = this.datesObject.getDates();
-    return date + '.jpg';
+    this.url = date + '.jpg'
+    return this.url;
   }
 
   
@@ -168,6 +173,7 @@ export class ProcessPage {
   private copyFileToLocalDir(namePath, currentName, newFileName) {
     var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/';
     this.file.copyFile(namePath, currentName, path, newFileName).then(success => {
+      this.lastImage = this.pathObject.pathForImage();
     }, error => {
       this.presentToast('Error while storing image ');
     });
@@ -180,7 +186,7 @@ export class ProcessPage {
    * Trigger when  : clicked "Start" Button
   **/  
   calculate() {
-    getPixels(this.gPath, (err, pixels)=> {
+    getPixels(this.lastImage, (err, pixels)=> {
       if(err) {
         console.log("Bad image path")
         return

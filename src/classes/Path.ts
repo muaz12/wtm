@@ -37,7 +37,7 @@ export class Path {
   **/
   public pathForImage() {
     this.log = this.log + 'passed pathForImage';
-    this.path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/' + this.datesObject.date;
+    this.path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/' + this.datesObject.date + '.jpg';
     return this.path;
   }
 }

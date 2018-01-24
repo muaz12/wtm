@@ -9,11 +9,10 @@
 <ion-content padding>
     <ion-card >
       <div class="col col-33">
-        <img  class="full-image" src="{{pathObject.pathForImage()}}" style="width: 100%" [hidden]="lastImage === null"/>
+        <img  class="full-image" src="{{lastImage}}" style="width: 100%" [hidden]="lastImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
-        <div class="card-description"><br>Store result = {{result}}</div>
         <div class="card-description"><br>Directory = {{gPath}}</div>
-        <div class="card-description"><br>SQLite = {{errorLog}}</div>
+        <div class="card-description"><br>Directory = {{directory}}</div>
         <div class="card-description"><br>SQLite Data = {{data}}</div>
       </div>
     </ion-card>
