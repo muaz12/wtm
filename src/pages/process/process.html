@@ -9,7 +9,7 @@
 <ion-content padding>
     <ion-card >
       <div class="col col-33">
-        <img  class="full-image" src="{{pathForImage(lastImage)}}" style="width: 100%" [hidden]="lastImage === null"/>
+        <img  class="full-image" src="{{pathObject.pathForImage()}}" style="width: 100%" [hidden]="lastImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
         <div class="card-description"><br>Store result = {{result}}</div>
         <div class="card-description"><br>Directory = {{gPath}}</div>
@@ -19,11 +19,11 @@
     </ion-card>
     <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
     <button ion-button block color="dark" large (click)="calculate()">Start</button>
-    <button ion-button block color="dark" large (click)="datesss.getDates()">Dates</button>
-    <button ion-button block color="dark" large (click)="databasessss.createTable()">Create</button>
-    <button ion-button block color="dark" large (click)="databasessss.insertData(ntu)">Insert</button>
-    <button ion-button block color="dark" large (click)="databasessss.updateNTU(1111)">Update</button>
-    <button ion-button block color="dark" large (click)="databasessss.deleteData()">Delete</button>
-    <button ion-button block color="dark" large (click)="databasessss.readData()">Read</button>
+    <button ion-button block color="dark" large (click)="datesObject.getDates()">Dates</button>
+    <button ion-button block color="dark" large (click)="databaseObject.createTable()">Create</button>
+    <button ion-button block color="dark" large (click)="databaseObject.insertData(ntu)">Insert</button>
+    <button ion-button block color="dark" large (click)="databaseObject.updateNTU(1111)">Update</button>
+    <button ion-button block color="dark" large (click)="databaseObject.deleteData()">Delete</button>
+    <button ion-button block color="dark" large (click)="databaseObject.readData()">Read</button>
     <button ion-button block color="dark" large (click)="updateLog()">Log</button>
 </ion-content>

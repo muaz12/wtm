@@ -26,7 +26,7 @@ export class LocationHandler {
 
 
   /** 
-   * Method Name   : getInstance()
+   * Method Name   : getGeolocation()
    * Purpose       : to get the instance of Geolocation class
    * Trigger when  : invoked by getLatitude(), getLongitude()
    **/

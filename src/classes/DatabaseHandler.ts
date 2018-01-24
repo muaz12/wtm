@@ -1,7 +1,7 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { ProcessPage } from '../pages/process/process'
+import { Path } from './Path'
 import { Dates } from './Dates'
 import { LocationHandler } from './LocationHandler'
 
@@ -12,6 +12,7 @@ export class DatabaseHandler {
   static databaseObject: DatabaseHandler;
   datesObject = Dates.getInstance();
   locationObject = LocationHandler.getInstance();
+  pathObject = Path.getInstance();
   log = '';
 
   
@@ -33,7 +34,7 @@ export class DatabaseHandler {
    * Purpose       : to get the instance of SQLite class
    * Trigger when  : invoked by openDatabase() 
    **/
-  getSQLite() {
+  public getSQLite() {
     return new SQLite();
   }
 
@@ -100,10 +101,10 @@ export class DatabaseHandler {
           this.log = this.log + 'passed Executed sql select statement';
           for (var i = 0; i < data.rows.length; i++) {
             this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
-            data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
+            /*data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
                         long: data.rows.item(i).longitude, date: data.rows.item(i).date, 
                         url: data.rows.item(i).url 
-            });
+            });*/
           }
         }
       }).catch(e => console.log(e));
@@ -122,7 +123,7 @@ export class DatabaseHandler {
     var user = 'Syazani';
     
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationObject.getLatitude()+', '+this.locationObject.getLongitude()+', '+this.datesObject.date+', "bbb")';
+      var sqlStatement = 'INSERT INTO result VALUES("'+user+'", '+ntu+', '+this.locationObject.getLatitude()+', '+this.locationObject.getLongitude()+', '+this.datesObject.date+', "'+this.pathObject.pathForImage()+'")';
       db.executeSql(sqlStatement, {})
         .then(() => {
           this.log = this.log + 'passed Executed sql insert statement';

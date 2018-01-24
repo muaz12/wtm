@@ -10,7 +10,8 @@ import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Dates } from '../../classes/Dates';
 import { DatabaseHandler } from '../../classes/DatabaseHandler';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { Path } from '../../classes/Path';
+
 declare var cordova: any;
 
 //COMPONENT
@@ -23,9 +24,9 @@ declare var cordova: any;
 export class ProcessPage {
 
   //VARIABLE
-  datesss = Dates.getInstance();
-  databasessss = DatabaseHandler.getInstance();
-  lastImage: string = null;
+  datesObject = Dates.getInstance();
+  databaseObject = DatabaseHandler.getInstance();
+  pathObject = Path.getInstance();
   loading: Loading;
   ntu:number = 0;
   gPath: string = 'null';
@@ -35,15 +36,15 @@ export class ProcessPage {
   //CONSTRUCTOR
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
-              public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
-              private sqlite: SQLite) { 
+              public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) { 
                 this.createDirectory();
               }
   
 
   public updateLog() {
-    this.data = this.data + ', ' + this.datesss.getLog();
-    this.data = this.data + ', ' + this.databasessss.getLog();
+    this.data = this.data + ', ' + this.datesObject.getLog();
+    this.data = this.data + ', ' + this.databaseObject.getLog();
+    this.data = this.data + ', ' + this.pathObject.getLog();
   }
 
 
@@ -154,7 +155,7 @@ export class ProcessPage {
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   private createFileName() {
-    var date = this.datesss.getDates();
+    var date = this.datesObject.getDates();
     return date + '.jpg';
   }
 
@@ -167,25 +168,9 @@ export class ProcessPage {
   private copyFileToLocalDir(namePath, currentName, newFileName) {
     var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/';
     this.file.copyFile(namePath, currentName, path, newFileName).then(success => {
-      this.lastImage = newFileName;
     }, error => {
       this.presentToast('Error while storing image ');
     });
-  }
-  
-
-  /** 
-   * Method Name   : pathForImage(img)
-   * Purpose       : to show image in Application
-   * Trigger when  : clicked "Please Select Image" Button
-  **/
-  public pathForImage(img) {
-    if (img === null) {
-      return '';
-    } else {
-      this.gPath = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/' + img;
-      return this.gPath;
-    }
   }
 
 
