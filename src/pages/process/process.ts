@@ -1,15 +1,15 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import getPixels from "get-pixels";
-import { Camera } from '@ionic-native/camera';
-import { ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
-import { File } from '@ionic-native/file';
-import { Transfer } from '@ionic-native/transfer';
+import { ActionSheetController, ToastController, Platform, LoadingController, Loading, NavController } from 'ionic-angular';
 import { FilePath } from '@ionic-native/file-path';
-import { Dates } from '../../classes/Dates';
+import { Transfer } from '@ionic-native/transfer';
+import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import getPixels from "get-pixels";
 import { DatabaseHandler } from '../../classes/DatabaseHandler';
+import { LocationHandler } from '../../classes/LocationHandler';
+import { Dates } from '../../classes/Dates';
 import { Path } from '../../classes/Path';
 
 declare var cordova: any;
@@ -24,16 +24,13 @@ declare var cordova: any;
 export class ProcessPage {
 
   //VARIABLE
-  datesObject = Dates.getInstance();
   databaseObject = DatabaseHandler.getInstance();
+  locationObject = LocationHandler.getInstance();
+  datesObject = Dates.getInstance();
   pathObject = Path.getInstance();
   lastImage: string = null;
-  loading: Loading;
   ntu:number = 0;
-  gPath: string = 'null';
-  directory: string = '';
   data: string = '';
-  url;
 
 
   //CONSTRUCTOR
@@ -42,14 +39,6 @@ export class ProcessPage {
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) { 
                 this.createDirectory();
               }
-  
-
-  public updateLog() {
-    this.data = this.data + ', ' + this.datesObject.getLog();
-    this.data = this.data + ', ' + this.databaseObject.getLog();
-    this.data = this.data + ', ' + this.pathObject.getLog();
-    this.directory = this.directory + ', ' + this.pathObject.pathForImage() + ', ' + this.url;
-  }
 
 
   /** 
@@ -58,7 +47,7 @@ export class ProcessPage {
    *                 application directory or not. Return false if the directory does not exist.
    * Trigger when  : invoked by createDirectory()
   **/
-  public checkDirectory(){
+  private checkDirectory(){
     this.file.checkDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter').then(_ => {
       return true;
     }, (err) => {
@@ -73,11 +62,10 @@ export class ProcessPage {
    *                 returns false which means the directory need to be created since it does not exist.
    * Trigger when  : invoked by constructor()
   **/
-  public createDirectory() {
+  private createDirectory() {
     if(!this.checkDirectory()) {
       //create directory Water Turbidity Meter
       this.file.createDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter', true).then(_ => {
-      
         //create directory Images
         var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/';
         this.file.createDir(path, 'Images', true).then(_ => {}).catch(err => {});
@@ -92,7 +80,7 @@ export class ProcessPage {
    *                 camera or select image from gallery 
    * Trigger when  : clicked "Please Select Image" Button
   **/
-  public presentActionSheet() {
+  private presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Select Image Source',
       buttons: [
@@ -123,7 +111,7 @@ export class ProcessPage {
    * Purpose       : to capture picture of water using phone camera or to choose picture from Gallery
    * Trigger when  : invoked by presentActionSheet()
   **/
-  public takePicture(sourceType) {
+  private takePicture(sourceType) {
     // Create options for the Camera Dialog
     var options = {
       quality: 100,
@@ -160,8 +148,9 @@ export class ProcessPage {
   **/
   private createFileName() {
     var date = this.datesObject.getDates();
-    this.url = date + '.jpg'
-    return this.url;
+    this.locationObject.getLatitude();
+    this.locationObject.getLongitude();
+    return date + '.jpg';
   }
 
   
@@ -185,7 +174,7 @@ export class ProcessPage {
    * Purpose       : to calculate NTU of image
    * Trigger when  : clicked "Start" Button
   **/  
-  calculate() {
+  private calculate() {
     getPixels(this.lastImage, (err, pixels)=> {
       if(err) {
         console.log("Bad image path")

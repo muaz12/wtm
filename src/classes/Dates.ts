@@ -5,13 +5,12 @@ export class Dates {
   //VARIABLES
   static dateObject: Dates;
   date: any;
-  log = '';
-  
+
 
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of Dates class
-   * Trigger when  : invoked by ProcessPage 
+   * Trigger when  : invoked by ProcessPage, DatabaseHandler
    **/
   public static getInstance() {
     if(!this.dateObject){
@@ -29,13 +28,9 @@ export class Dates {
   public getDates() {
     var d = new Date();
     this.date = d.getTime();
-    this.log = this.log + 'passed getDates';
     return this.date;
   }
 
-  public getLog() {
-    return this.log;
-  }
 
   /** 
    * Method Name   : computeDatesDifference()

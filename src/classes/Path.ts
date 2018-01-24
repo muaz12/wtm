@@ -10,17 +10,12 @@ export class Path {
   static pathObject: Path;
   datesObject = Dates.getInstance();
   path;
-  log = '';
-
-  public getLog() {
-    return this.log;
-  }
-
+  
 
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of Path class
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by DatabaseHandler, ProcessPage
    **/
   public static getInstance() {
     if(!this.pathObject){
@@ -33,10 +28,9 @@ export class Path {
   /** 
    * Method Name   : pathForImage()
    * Purpose       : to show image in Application
-   * Trigger when  : clicked "Please Select Image" Button
+   * Trigger when  : invoked by ProcessPage copyFileToLocalDir(), DatabaseHandler insertData()
   **/
   public pathForImage() {
-    this.log = this.log + 'passed pathForImage';
     this.path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/' + this.datesObject.date + '.jpg';
     return this.path;
   }
