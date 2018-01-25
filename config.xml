@@ -103,5 +103,6 @@
     </plugin>
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />
+    <plugin name="cordova-plugin-firebase" spec="^0.1.25" />
     <engine name="android" spec="6.3.0" />
 </widget>

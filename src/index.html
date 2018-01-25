@@ -35,6 +35,21 @@
   <!-- Ionic's root component and where the app will load -->
   <ion-app></ion-app>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyAFZsrOWGZGiOdxpVY0rpVMe0VDmLZDOX4",
+      authDomain: "water-turbidity-meter.firebaseapp.com",
+      databaseURL: "https://water-turbidity-meter.firebaseio.com",
+      projectId: "water-turbidity-meter",
+      storageBucket: "",
+      messagingSenderId: "555731755224"
+    };
+    firebase.initializeApp(config);
+  </script>
+
   <!-- The polyfills js is generated during the build process -->
   <script src="build/polyfills.js"></script>
 

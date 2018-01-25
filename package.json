@@ -25,6 +25,7 @@
     "@ionic-native/diagnostic": "^4.5.2",
     "@ionic-native/file": "^4.5.2",
     "@ionic-native/file-path": "^4.5.2",
+    "@ionic-native/firebase": "^4.5.2",
     "@ionic-native/geolocation": "^4.5.2",
     "@ionic-native/local-notifications": "^4.5.2",
     "@ionic-native/location-accuracy": "^4.5.2",
@@ -44,6 +45,7 @@
     "cordova-plugin-file": "^5.0.0",
     "cordova-plugin-file-transfer": "^1.7.0",
     "cordova-plugin-filepath": "^1.1.0",
+    "cordova-plugin-firebase": "^0.1.25",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-imagepicker": "^1.3.0",
     "cordova-plugin-ionic-webview": "^1.1.16",
@@ -85,7 +87,8 @@
         "XWALK_MULTIPLEAPK": "true"
       },
       "cordova-plugin-geolocation": {},
-      "cordova-sqlite-storage": {}
+      "cordova-sqlite-storage": {},
+      "cordova-plugin-firebase": {}
     },
     "platforms": [
       "android"

@@ -1,7 +1,7 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { Component } from '@angular/core';
-import { ActionSheetController, ToastController, Platform, LoadingController, Loading, NavController } from 'ionic-angular';
+import { ActionSheetController, ToastController, Platform, LoadingController, Loading, NavController, AlertController } from 'ionic-angular';
 import { FilePath } from '@ionic-native/file-path';
 import { Transfer } from '@ionic-native/transfer';
 import { Camera } from '@ionic-native/camera';
@@ -11,6 +11,7 @@ import { DatabaseHandler } from '../../classes/DatabaseHandler';
 import { LocationHandler } from '../../classes/LocationHandler';
 import { Dates } from '../../classes/Dates';
 import { Path } from '../../classes/Path';
+import { FirebaseProvider } from '../../providers/firebase/firebase';
 
 declare var cordova: any;
 
@@ -36,7 +37,8 @@ export class ProcessPage {
   //CONSTRUCTOR
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
-              public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController) { 
+              public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
+              public firebaseProvider: FirebaseProvider, public loading: Loading, public alertCtrl: AlertController) { 
                 this.createDirectory();
               }
 
@@ -112,6 +114,12 @@ export class ProcessPage {
    * Trigger when  : invoked by presentActionSheet()
   **/
   private takePicture(sourceType) {
+    //Create loading
+    this.loading = this.loadingCtrl.create({
+      content: 'Image Loading...',
+    });
+    this.loading.present();
+
     // Create options for the Camera Dialog
     var options = {
       quality: 100,
@@ -135,6 +143,9 @@ export class ProcessPage {
         var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
       }
+
+      this.loading.dismissAll();
+      this.presentToast('Image succesful selected.');
     }, (err) => {
       this.presentToast('Error while selecting image.');
     });
@@ -175,6 +186,12 @@ export class ProcessPage {
    * Trigger when  : clicked "Start" Button
   **/  
   private calculate() {
+    //Create loading
+    this.loading = this.loadingCtrl.create({
+      content: 'Calculating...',
+    });
+    this.loading.present();
+
     getPixels(this.lastImage, (err, pixels)=> {
       if(err) {
         console.log("Bad image path")
@@ -204,6 +221,36 @@ export class ProcessPage {
       var ntu1 = 3.80*(widthMean1)+5.35;
       this.ntu = ntu1;
     })
+    this.loading.dismissAll();
+    this.showAlert();
+  }
+
+
+  /** 
+   * Method Name   : showAlert()
+   * Purpose       : to display result in alert box
+   * Trigger when  : invoked by any method
+  **/
+  public showAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Result',
+      subTitle: 'Water Turbidity: '+ this.ntu + 'NTU',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Save',
+          handler: () => {
+            console.log('Saved clicked');
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
 
