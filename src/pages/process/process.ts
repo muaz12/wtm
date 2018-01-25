@@ -11,7 +11,7 @@ import { DatabaseHandler } from '../../classes/DatabaseHandler';
 import { LocationHandler } from '../../classes/LocationHandler';
 import { Dates } from '../../classes/Dates';
 import { Path } from '../../classes/Path';
-import { FirebaseProvider } from '../../providers/firebase/firebase';
+import { FirebaseProvider } from '../../classes/Firebase';
 
 declare var cordova: any;
 
@@ -25,6 +25,7 @@ declare var cordova: any;
 export class ProcessPage {
 
   //VARIABLE
+  firebaseObject = FirebaseProvider.getInstance();
   databaseObject = DatabaseHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
@@ -38,7 +39,7 @@ export class ProcessPage {
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
-              public firebaseProvider: FirebaseProvider, public loading: Loading, public alertCtrl: AlertController) { 
+              public loading: Loading, public alertCtrl: AlertController) { 
                 this.createDirectory();
               }
 

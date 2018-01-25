@@ -17,8 +17,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { SQLite } from '@ionic-native/sqlite';
 import { Geolocation } from '@ionic-native/geolocation';
-import { FirebaseProvider } from '../providers/firebase/firebase';
-import { Firebase } from '@ionic-native/firebase';
+//import { Firebase } from '@ionic-native/firebase';
 
 @NgModule({
   declarations: [
@@ -48,10 +47,9 @@ import { Firebase } from '@ionic-native/firebase';
     Camera,
     SQLite,
     Geolocation,
-    Firebase,
+    //Firebase,
     FilePath,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FirebaseProvider
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}
