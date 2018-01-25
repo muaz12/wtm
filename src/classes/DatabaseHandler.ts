@@ -16,6 +16,7 @@ export class DatabaseHandler {
   datesObject = Dates.getInstance();
   userObject = User.getInstance();
   pathObject = Path.getInstance();
+  log;
 
   
   /** 
@@ -91,16 +92,17 @@ export class DatabaseHandler {
       db.executeSql('SELECT * FROM result', {}).then((data) => {
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
-            //this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
-            data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
+            this.log = this.log + ', Data read database ,';
+            this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
+            /*data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
                         long: data.rows.item(i).longitude, date: data.rows.item(i).date, 
                         url: data.rows.item(i).url 
-            });
+            });*/
           }
         }
       }).catch(e => console.log(e));
     }).catch(e => console.log(e));
-    return data;
+    //return data;
   }
 
 
@@ -113,7 +115,7 @@ export class DatabaseHandler {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'INSERT INTO result VALUES("'+this.userObject.getUserName()+'", '+ntu+', '+this.locationObject.latitude+', '+this.locationObject.longitude+', '+this.datesObject.date+', "'+this.pathObject.pathForImage()+'")';
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql insert statement'))
+        .then(() =>  this.log = this.log + ', Data inserted database ,')
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }

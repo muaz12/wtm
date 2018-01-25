@@ -1,7 +1,7 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { Component } from '@angular/core';
-import { ActionSheetController, ToastController, Platform, LoadingController, Loading, NavController, AlertController } from 'ionic-angular';
+import { ActionSheetController, ToastController, Platform, LoadingController, NavController, AlertController } from 'ionic-angular';
 import { FilePath } from '@ionic-native/file-path';
 import { Transfer } from '@ionic-native/transfer';
 import { Camera } from '@ionic-native/camera';
@@ -40,12 +40,13 @@ export class ProcessPage {
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
-              public loading: Loading, public alertCtrl: AlertController) { 
+              public alertCtrl: AlertController) { 
                 this.createDirectory();
               }
 
   public updateLog() {
-    this.data = this.firebaseObject.log;
+    this.data =  this.data + '/ ' + this.firebaseObject.log;
+    this.log = this.log + '/ ' + this.databaseObject.log;
   }
 
   /** 
@@ -54,7 +55,7 @@ export class ProcessPage {
    *                 application directory or not. Return false if the directory does not exist.
    * Trigger when  : invoked by createDirectory()
   **/
-  private checkDirectory(){
+  public checkDirectory(){
     this.file.checkDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter').then(_ => {
       return true;
     }, (err) => {
@@ -69,7 +70,7 @@ export class ProcessPage {
    *                 returns false which means the directory need to be created since it does not exist.
    * Trigger when  : invoked by constructor()
   **/
-  private createDirectory() {
+  public createDirectory() {
     if(!this.checkDirectory()) {
       //create directory Water Turbidity Meter
       this.file.createDir(cordova.file.externalRootDirectory, 'Water Turbidity Meter', true).then(_ => {
@@ -87,7 +88,7 @@ export class ProcessPage {
    *                 camera or select image from gallery 
    * Trigger when  : clicked "Please Select Image" Button
   **/
-  private presentActionSheet() {
+  public presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Select Image Source',
       buttons: [
@@ -118,12 +119,12 @@ export class ProcessPage {
    * Purpose       : to capture picture of water using phone camera or to choose picture from Gallery
    * Trigger when  : invoked by presentActionSheet()
   **/
-  private takePicture(sourceType) {
+  public takePicture(sourceType) {
     //Create loading
-    this.loading = this.loadingCtrl.create({
+    var loading = this.loadingCtrl.create({
       content: 'Image Loading...',
     });
-    this.loading.present();
+    loading.present();
 
     // Create options for the Camera Dialog
     var options = {
@@ -149,7 +150,7 @@ export class ProcessPage {
         this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
       }
 
-      this.loading.dismissAll();
+      loading.dismissAll();
       this.presentToast('Image succesful selected.');
     }, (err) => {
       this.presentToast('Error while selecting image.');
@@ -162,7 +163,7 @@ export class ProcessPage {
    * Purpose       : to rename captured image (image from Camera) / to rename selected image (image from Gallery)
    * Trigger when  : invoked by takePicture(sourceType)
   **/
-  private createFileName() {
+  public createFileName() {
     var date = this.datesObject.getDates();
     this.locationObject.getLatitude();
     this.locationObject.getLongitude();
@@ -175,7 +176,7 @@ export class ProcessPage {
    * Purpose       : to copy image file to Application Directory
    * Trigger when  : invoked by takePicture(sourceType)
   **/
-  private copyFileToLocalDir(namePath, currentName, newFileName) {
+  public copyFileToLocalDir(namePath, currentName, newFileName) {
     var path = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/';
     this.file.copyFile(namePath, currentName, path, newFileName).then(success => {
       this.lastImage = this.pathObject.pathForImage();
@@ -190,12 +191,12 @@ export class ProcessPage {
    * Purpose       : to calculate NTU of image
    * Trigger when  : clicked "Start" Button
   **/  
-  private calculate() {
+  public calculate() {
     //Create loading
-    this.loading = this.loadingCtrl.create({
+    var loading = this.loadingCtrl.create({
       content: 'Calculating...',
     });
-    this.loading.present();
+    
 
     getPixels(this.lastImage, (err, pixels)=> {
       if(err) {
@@ -207,7 +208,7 @@ export class ProcessPage {
       // console.log("pixel shape", pixels.shape)
       var nx = pixels.shape[0], //width
       ny = pixels.shape[1] //height
-
+      loading.present();
       var meanHeight1 = 0;
       var widthSum1 = 0;
       for (var i = 0; i<nx; i++){
@@ -225,9 +226,9 @@ export class ProcessPage {
       var widthMean1 = widthSum1/nx;
       var ntu1 = 3.80*(widthMean1)+5.35;
       this.ntu = ntu1;
+      loading.dismissAll();
+      this.showAlert();
     })
-    this.loading.dismissAll();
-    this.showAlert();
   }
 
 
@@ -264,7 +265,7 @@ export class ProcessPage {
    * Purpose       : to display toast (message box)
    * Trigger when  : invoked by any method
   **/
-  private presentToast(text) {
+  public presentToast(text) {
     let toast = this.toastCtrl.create({
       message: text,
       duration: 3000,

@@ -47,7 +47,6 @@ export class FirebaseProvider {
    * Trigger when  : invoked by 
   **/
   public getInstanceOfResult() {
-    this.log = this.log + ', Result ref got ,';
     return firebase.database().ref('result');
   }
 
@@ -75,8 +74,13 @@ export class FirebaseProvider {
       longitude: this.locationObject.longitude, 
       date: this.datesObject.date, 
       url: ''+this.pathObject.pathForImage()
+    }).then(_ => {
+      this.log = this.log + ', Data inserted , path: ' + this.pathObject.pathForImage() + ', date: ' + this.datesObject.date;
+    }).catch(err => {
+      var error = JSON.stringify(err);
+      this.log = this.log + ', Error read ' + error;
     });
-    this.log = this.log + ', Data inserted ,';
+    
   }
 
 
@@ -88,9 +92,12 @@ export class FirebaseProvider {
   public pullDataFromFirebase() { 
     this.getInstanceOfResult().on('child_added', function(snapshot) {
       this.data = snapshot.val(); 
+    }).then(_ => {
+      this.log = this.log + ', Data read ,';
+      this.log = this.log + ', user: ' + this.data.user + ', ntu: ' + this.data.ntu + ', lat: ' + this.data.latitude + ', long: ' + this.data.longitude + ', date: ' + this.data.date + ', url: ' + this.data.url;
+    }).catch(err => {
+      var error = JSON.stringify(err);
+      this.log = this.log + ', Error read ' + error;
     });
-    this.log = this.log + ', Data read ,';
-    this.log = this.log + ', user: ' + this.data.user + ', ntu: ' + this.data.ntu + ', lat: ' + this.data.latitude + ', long: ' + this.data.longitude + ', date: ' + this.data.date + ', url: ' + this.data.url;
-    
   }
 }
