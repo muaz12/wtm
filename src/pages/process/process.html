@@ -16,8 +16,7 @@
     </ion-card>
     <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
     <button ion-button block color="dark" large (click)="calculate()">Start</button>
-    <button ion-button block color="dark" large (click)="databaseObject.insertData(ntu)">Insert</button>
-    <button ion-button block color="dark" large (click)="databaseObject.deleteData()">Delete</button>
-    <button ion-button block color="dark" large (click)="databaseObject.readData()">Read</button>
+    <button ion-button block color="dark" large (click)="firebaseObject.pushDataToFirebase(ntu)">Insert</button>
+    <button ion-button block color="dark" large (click)="firebaseObject.pullDataFromFirebase()">Read</button>
     <button ion-button block color="dark" large (click)="updateLog()">Log</button>
 </ion-content>

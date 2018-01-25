@@ -33,6 +33,7 @@ export class ProcessPage {
   lastImage: string = null;
   ntu:number = 0;
   data: string = '';
+  log: string = '';
 
 
   //CONSTRUCTOR
@@ -43,6 +44,9 @@ export class ProcessPage {
                 this.createDirectory();
               }
 
+  public updateLog() {
+    this.data = this.firebaseObject.log;
+  }
 
   /** 
    * Method Name   : checkDirectory()

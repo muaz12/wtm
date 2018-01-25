@@ -1,5 +1,9 @@
 
 //REQUIRED LIBRARY AND DEPENDENCIES
+import { LocationHandler } from './LocationHandler';
+import { Dates } from './Dates';
+import { User } from './User';
+import { Path } from './Path';
 declare var firebase: any;
 
 //CLASS
@@ -7,6 +11,10 @@ export class FirebaseProvider {
 
   //VARIABLE
   static firebaseObject: FirebaseProvider;
+  locationObject = LocationHandler.getInstance();
+  datesObject = Dates.getInstance();
+  userObject = User.getInstance();
+  pathObject = Path.getInstance();
   data;
   log;
 
@@ -59,14 +67,14 @@ export class FirebaseProvider {
    * Purpose       : to store the result into "result" table in firebase
    * Trigger when  : invoked by 
   **/
-  public pushDataToFirebase(user, ntu, latitude, longitude, date, url) {
+  public pushDataToFirebase(ntu) {
     this.getInstanceOfResult().push({
-      user: ''+user, 
+      user: ''+this.userObject.getUserName(), 
       ntu: ntu, 
-      latitude: latitude, 
-      longitude: longitude, 
-      date: date, 
-      url: ''+url
+      latitude: this.locationObject.latitude, 
+      longitude: this.locationObject.longitude, 
+      date: this.datesObject.date, 
+      url: ''+this.pathObject.pathForImage()
     });
     this.log = this.log + ', Data inserted ,';
   }
@@ -82,11 +90,7 @@ export class FirebaseProvider {
       this.data = snapshot.val(); 
     });
     this.log = this.log + ', Data read ,';
-  }
-
-
-  public getData() {
     this.log = this.log + ', user: ' + this.data.user + ', ntu: ' + this.data.ntu + ', lat: ' + this.data.latitude + ', long: ' + this.data.longitude + ', date: ' + this.data.date + ', url: ' + this.data.url;
-    return this.log; 
+    
   }
 }
