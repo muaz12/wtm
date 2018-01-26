@@ -11,7 +11,7 @@ import { DatabaseHandler } from '../../classes/DatabaseHandler';
 import { LocationHandler } from '../../classes/LocationHandler';
 import { Dates } from '../../classes/Dates';
 import { Path } from '../../classes/Path';
-import { FirebaseProvider } from '../../classes/Firebase';
+import { FirebaseProvider } from '../../classes/FirebaseProvider';
 
 declare var cordova: any;
 
@@ -34,6 +34,7 @@ export class ProcessPage {
   ntu:number = 0;
   data: string = '';
   log: string = '';
+  datafirebase: string = '';
 
 
   //CONSTRUCTOR
@@ -45,8 +46,21 @@ export class ProcessPage {
               }
 
   public updateLog() {
-    this.data =  this.data + '/ ' + this.firebaseObject.log;
-    this.log = this.log + '/ ' + this.databaseObject.log;
+    this.data =  this.data + ' @ ' + this.firebaseObject.log;
+    this.datafirebase =  this.datafirebase + ' @ ' + this.firebaseObject.pullDataFromFirebase();
+    this.log = this.log + ' @ ' + this.databaseObject.log;
+
+  }
+
+  public remove() {
+    var date = this.datesObject.date;
+    this.firebaseObject.removeDataFromFirebase(date);
+  }
+
+  public update() {
+    var date = this.datesObject.date;
+    var ntu = 111;
+    this.firebaseObject.updateDataInFirebase(date, ntu);
   }
 
   /** 
@@ -184,7 +198,9 @@ export class ProcessPage {
       this.presentToast('Error while storing image ');
     });
   }
-
+loading = this.loadingCtrl.create({
+      content: 'Calculating...',
+    });
 
   /** 
    * Method Name   : calculate()
@@ -193,12 +209,11 @@ export class ProcessPage {
   **/  
   public calculate() {
     //Create loading
-    var loading = this.loadingCtrl.create({
-      content: 'Calculating...',
-    });
+     
     
 
     getPixels(this.lastImage, (err, pixels)=> {
+      this.loading.present();
       if(err) {
         console.log("Bad image path")
         return
@@ -208,7 +223,7 @@ export class ProcessPage {
       // console.log("pixel shape", pixels.shape)
       var nx = pixels.shape[0], //width
       ny = pixels.shape[1] //height
-      loading.present();
+  
       var meanHeight1 = 0;
       var widthSum1 = 0;
       for (var i = 0; i<nx; i++){
@@ -226,7 +241,6 @@ export class ProcessPage {
       var widthMean1 = widthSum1/nx;
       var ntu1 = 3.80*(widthMean1)+5.35;
       this.ntu = ntu1;
-      loading.dismissAll();
       this.showAlert();
     })
   }
@@ -245,13 +259,13 @@ export class ProcessPage {
         {
           text: 'Cancel',
           handler: () => {
-            console.log('Cancel clicked');
+            this.loading.dismissAll();
           }
         },
         {
           text: 'Save',
           handler: () => {
-            console.log('Saved clicked');
+            this.loading.dismissAll();
           }
         }
       ]

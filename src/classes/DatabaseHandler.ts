@@ -45,8 +45,7 @@ export class DatabaseHandler {
   /** 
    * Method Name   : openDatabase()
    * Purpose       : to open database named "WTMDatabase.db"
-   * Trigger when  : invoked by createTable(), dropTable(), readData(), insertData(ntu), updateNTU(value),
-   *                 deleteData()
+   * Trigger when  : invoked by CRUD functions
    **/
   public openDatabase() {
     return this.getSQLite().create({name: 'WTMDatabase.db', location: 'default'});
@@ -54,25 +53,39 @@ export class DatabaseHandler {
 
 
   /** 
-   * Method Name   : createTable()
+   * Method Name   : createTableResult()
    * Purpose       : to create table "result" in Application database
    * Trigger when  : invoked by 
    **/
-  public createTable() {
+  public createTableResult() {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'CREATE TABLE IF NOT EXISTS result(user VARCHAR(32), ntu DOUBLE(20,10), latitude DOUBLE(20,10), longitude DOUBLE(20,10), date DOUBLE(20,0), url VARCHAR(32))';
-      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement'))
+      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement for result'))
       .catch(e => console.log(e));
      }).catch(e => console.log(e));
   }
 
 
   /** 
-   * Method Name   : dropTable()
+   * Method Name   : createTableUser()
+   * Purpose       : to create table "user" in Application database
+   * Trigger when  : invoked by 
+   **/
+  public createTableUser() {
+    this.openDatabase().then((db: SQLiteObject) => {
+      var sqlStatement = 'CREATE TABLE IF NOT EXISTS user(username VARCHAR(32), password VARCHAR(32))';
+      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement for user'))
+      .catch(e => console.log(e));
+     }).catch(e => console.log(e));
+  }
+
+
+  /** 
+   * Method Name   : dropTableResult()
    * Purpose       : to drop table "result" in Application database
    * Trigger when  : invoked by 
    **/
-  public dropTable() {
+  public dropTableResult() {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'DROP TABLE result';
       db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql drop statement'))
@@ -82,27 +95,81 @@ export class DatabaseHandler {
 
 
   /** 
-   * Method Name   : readData()
-   * Purpose       : to read the data inside table "result"
+   * Method Name   : dropTableUser()
+   * Purpose       : to drop table "user" in Application database
    * Trigger when  : invoked by 
    **/
-  public readData() {
+  public dropTableUser() {
+    this.openDatabase().then((db: SQLiteObject) => {
+      var sqlStatement = 'DROP TABLE user';
+      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql drop statement'))
+      .catch(e => console.log(e));
+     }).catch(e => console.log(e));
+  }
+
+
+  /** 
+   * Method Name   : readDataResult()
+   * Purpose       : to read all data inside table "result"
+   * Trigger when  : invoked by 
+   **/
+  public readDataResult() {
     var data = [];
     this.openDatabase().then((db: SQLiteObject) => {
       db.executeSql('SELECT * FROM result', {}).then((data) => {
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
-            this.log = this.log + ', Data read database ,';
-            this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
-            /*data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
+            //this.log = this.log + ', Data read database ,';
+            //this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
+            data.push({ user: data.rows.item(i).user, ntu: data.rows.item(i).ntu, lat: data.rows.item(i).latitude,
                         long: data.rows.item(i).longitude, date: data.rows.item(i).date, 
                         url: data.rows.item(i).url 
-            });*/
+            });
           }
         }
       }).catch(e => console.log(e));
     }).catch(e => console.log(e));
-    //return data;
+    return data;
+  }
+
+
+  /** 
+   * Method Name   : readDataUser()
+   * Purpose       : to read all user's data inside table "user"
+   * Trigger when  : invoked by 
+   **/
+  public readDataUser() {
+    var data = [];
+    this.openDatabase().then((db: SQLiteObject) => {
+      db.executeSql('SELECT * FROM user', {}).then((data) => {
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) {
+             data.push({ username: data.rows.item(i).username, password: data.rows.item(i).password});
+          }
+        }
+      }).catch(e => console.log(e));
+    }).catch(e => console.log(e));
+    return data;
+  }
+
+
+  /** 
+   * Method Name   : readDataSpecificUser(user)
+   * Purpose       : to read specific user's data inside table "user"
+   * Trigger when  : invoked by 
+   **/
+  public readDataSpecificUser(user) {
+    var data = [];
+    this.openDatabase().then((db: SQLiteObject) => {
+      db.executeSql('SELECT username, password FROM user WHERE username = "'+user+'"', {}).then((data) => {
+        if (data.rows.length > 0) {
+          for (var i = 0; i < data.rows.length; i++) {
+             data.push({ username: data.rows.item(i).username, password: data.rows.item(i).password});
+          }
+        }
+      }).catch(e => console.log(e));
+    }).catch(e => console.log(e));
+    return data;
   }
 
 
@@ -111,11 +178,26 @@ export class DatabaseHandler {
    * Purpose       : to store NTU result inside table "result"
    * Trigger when  : invoked by 
    **/
-  public insertData(ntu) {
+  public insertDataResult(ntu) {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'INSERT INTO result VALUES("'+this.userObject.getUserName()+'", '+ntu+', '+this.locationObject.latitude+', '+this.locationObject.longitude+', '+this.datesObject.date+', "'+this.pathObject.pathForImage()+'")';
       db.executeSql(sqlStatement, {})
-        .then(() =>  this.log = this.log + ', Data inserted database ,')
+        .then(() => console.log('Data result inserted'))
+        .catch(e => console.log(e));
+    }).catch(e => console.log(e));
+  }
+
+
+  /** 
+   * Method Name   : insertDataUser()
+   * Purpose       : to store user's data inside table "user"
+   * Trigger when  : invoked by 
+   **/
+  public insertDataUser(username, password) {
+    this.openDatabase().then((db: SQLiteObject) => {
+      var sqlStatement = 'INSERT INTO user VALUES("'+username+'", "'+password+'")';
+      db.executeSql(sqlStatement, {})
+        .then(() => console.log('Data user inserted'))
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
@@ -130,22 +212,52 @@ export class DatabaseHandler {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'UPDATE result SET ntu = '+value+' WHERE latitude = 123.432';
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql update statement'))
+        .then(() => console.log('Executed sql update statement for result'))
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
 
 
   /** 
-   * Method Name   : deleteData()
+   * Method Name   : updateUser(value)
+   * Purpose       : to update data inside table "result"
+   * Trigger when  : invoked by 
+   **/
+  public updateUser(username, password) {
+    this.openDatabase().then((db: SQLiteObject) => {
+      var sqlStatement = 'UPDATE user SET password = "'+password+'" WHERE username = "'+username+'"';
+      db.executeSql(sqlStatement, {})
+        .then(() => console.log('Executed sql update statement for user'))
+        .catch(e => console.log(e));
+    }).catch(e => console.log(e));
+  }
+
+
+  /** 
+   * Method Name   : deleteDataResult()
    * Purpose       : to delete data inside table "result"
    * Trigger when  : invoked by 
    **/
-  public deleteData() {
+  public deleteDataResult(date) {
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'DELETE FROM result WHERE latitude = 123.432';
+      var sqlStatement = 'DELETE FROM result WHERE date = '+date;
       db.executeSql(sqlStatement, {})
-        .then(() => console.log('Executed sql delete statement'))
+        .then(() => console.log('Executed sql delete statement for result'))
+        .catch(e => console.log(e));
+    }).catch(e => console.log(e));
+  }
+
+
+  /** 
+   * Method Name   : deleteDataUser()
+   * Purpose       : to delete data inside table "user"
+   * Trigger when  : invoked by 
+   **/
+  public deleteDataUser(username) {
+    this.openDatabase().then((db: SQLiteObject) => {
+      var sqlStatement = 'DELETE FROM user WHERE username = "'+username+'"';
+      db.executeSql(sqlStatement, {})
+        .then(() => console.log('Executed sql delete statement for user'))
         .catch(e => console.log(e));
     }).catch(e => console.log(e));
   }
