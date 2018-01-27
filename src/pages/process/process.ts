@@ -33,9 +33,9 @@ export class ProcessPage {
   pathObject = Path.getInstance();
   lastImage: string = null;
   ntu:number = 0;
-  data: string = '';
-  log: string = '';
-  datafirebase: string = '';
+  dataDatabase:string = 'null';
+  log: string = 'null';
+  datafirebase: number[];
 
 
   //CONSTRUCTOR
@@ -44,59 +44,69 @@ export class ProcessPage {
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
               public alertCtrl: AlertController) { 
                 this.createDirectory();
-                this.databaseObject.createTableResult();
-                this.databaseObject.createTableUser();
+                //this.databaseObject.createTableResult();
+                //this.databaseObject.createTableUser();
               }
 
-  public updateLog() {
-    this.data =  this.data + ' @ ' + this.firebaseObject.log;
-    this.datafirebase =  this.datafirebase + ' @ ' + this.pullDataFromFirebase();
-    this.log = this.log + ' @ ' + this.databaseObject.log;
+  public readDatabase() {
+    this.dataDatabase = this.dataDatabase + ' @ ' + this.databaseObject.log;
+    this.dataDatabase = this.dataDatabase + ' @ ' + this.databaseObject.readDataResult();
+  }
 
+  public readFirebase() {
+    this.datafirebase = this.pullDataFromFirebase();
+  }
+
+  public updateLog() {
+    this.dataDatabase = this.dataDatabase + ' @@ ' + this.databaseObject.getLog();
+    this.log += this.log + ' @ ';
   }
  
-  public pullDataFromFirebase() { 
-    var loading = this.loadingCtrl.create({
+  public pullDataFromFirebase() : number[] { 
+    this.log = this.log + ', Entering pullDataFromFirebase() ,';
+    var arrResult: number[];
+    arrResult.push(1111);
+
+    /*var loading = this.loadingCtrl.create({
       content: 'Firebase Loading...',
     });
     loading.present();
-    this.log = this.log + ', Entering pullDataFromFirebase() ,';
 
+    
+    
     firebase.database().ref('result').once('value').then(function(snap) {
-       var log = log + ', Entering ref ,';
+      var arrResult: number[];
+      arrResult.push(1111);
         if(snap.val()){
-            loading.dismissAll();
-           log = log + ', data: ' + snap.val();
-           return log;
+          loading.dismissAll();
+          arrResult.push(snap.val().key);
+          return arrResult;
         } else {
-            log = log + ', data empty ,';
-            return log;
+          arrResult.push(0);
         }
-    }, function(error) {
-        var error2 = JSON.stringify(error);
-        this.log = this.log + ', error pull: ' + error2;
-    });
-
-    this.log = this.log + ', Exiting pullDataFromFirebase() ,';
+    }, function(error) {});*/
 
     /*
-    firebase.database().ref('result').once("value", function(snapshot) {
-      this.log = this.log + ', Entering once() ,';
-      snapshot.forEach(function(childSnapshot) {
-        this.log = this.log + ', Entering forEach() ,';
-        //var childKey = childSnapshot.key;
-        //var data = childSnapshot.val();
-        //this.log = this.log + ', Data is not empty ,';
-        //this.log = this.log + ', Data read ,';
-       // this.log = this.log + ', user: ' + data.user + ', ntu: ' + data.ntu + ', lat: ' + data.latitude + ', long: ' + data.longitude + ', date: ' + data.date + ', url: ' + data.url;
-      }).catch(e => {
-        var error = JSON.stringify(e);
-        this.log = this.log + ', error pull kecik: ' + error;
-      });
-    }).catch(e => {
-        var error = JSON.stringify(e);
-        this.log = this.log + ', error pull besar: ' + error;
-      });*/
+    firebase.database().ref('result').once('value').then(function(snapshot) { snapshot.forEach(function(childSnapshot) {
+      
+      if(childSnapshot.val()){
+        loading.dismissAll();
+        arrResult.push(childSnapshot.key);
+        return arrResult;
+      } else {
+        arrResult.push('empty bohh');
+        return arrResult;
+      }
+    }, function(error) {
+      var error2 = JSON.stringify(error);
+      this.log = this.log + ', error pull child: ' + error2;
+    })}, function(error) {
+      var error2 = JSON.stringify(error);
+      this.log = this.log + ', error pull parent: ' + error2;
+    });*/
+    //loading.dismissAll();
+    this.log = this.log + ', Exiting pullDataFromFirebase() ,';
+    return arrResult;
   }
 
   public remove() {
@@ -109,6 +119,7 @@ export class ProcessPage {
     var ntu = 111;
     this.firebaseObject.updateDataInFirebase(date, ntu);
   }
+
 
   /** 
    * Method Name   : checkDirectory()
