@@ -14,6 +14,7 @@ import { Path } from '../../classes/Path';
 import { FirebaseProvider } from '../../classes/FirebaseProvider';
 
 declare var cordova: any;
+declare var firebase: any;
 
 //COMPONENT
 @Component({
@@ -43,13 +44,59 @@ export class ProcessPage {
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
               public alertCtrl: AlertController) { 
                 this.createDirectory();
+                this.databaseObject.createTableResult();
+                this.databaseObject.createTableUser();
               }
 
   public updateLog() {
     this.data =  this.data + ' @ ' + this.firebaseObject.log;
-    this.datafirebase =  this.datafirebase + ' @ ' + this.firebaseObject.pullDataFromFirebase();
+    this.datafirebase =  this.datafirebase + ' @ ' + this.pullDataFromFirebase();
     this.log = this.log + ' @ ' + this.databaseObject.log;
 
+  }
+ 
+  public pullDataFromFirebase() { 
+    var loading = this.loadingCtrl.create({
+      content: 'Firebase Loading...',
+    });
+    loading.present();
+    this.log = this.log + ', Entering pullDataFromFirebase() ,';
+
+    firebase.database().ref('result').once('value').then(function(snap) {
+       var log = log + ', Entering ref ,';
+        if(snap.val()){
+            loading.dismissAll();
+           log = log + ', data: ' + snap.val();
+           return log;
+        } else {
+            log = log + ', data empty ,';
+            return log;
+        }
+    }, function(error) {
+        var error2 = JSON.stringify(error);
+        this.log = this.log + ', error pull: ' + error2;
+    });
+
+    this.log = this.log + ', Exiting pullDataFromFirebase() ,';
+
+    /*
+    firebase.database().ref('result').once("value", function(snapshot) {
+      this.log = this.log + ', Entering once() ,';
+      snapshot.forEach(function(childSnapshot) {
+        this.log = this.log + ', Entering forEach() ,';
+        //var childKey = childSnapshot.key;
+        //var data = childSnapshot.val();
+        //this.log = this.log + ', Data is not empty ,';
+        //this.log = this.log + ', Data read ,';
+       // this.log = this.log + ', user: ' + data.user + ', ntu: ' + data.ntu + ', lat: ' + data.latitude + ', long: ' + data.longitude + ', date: ' + data.date + ', url: ' + data.url;
+      }).catch(e => {
+        var error = JSON.stringify(e);
+        this.log = this.log + ', error pull kecik: ' + error;
+      });
+    }).catch(e => {
+        var error = JSON.stringify(e);
+        this.log = this.log + ', error pull besar: ' + error;
+      });*/
   }
 
   public remove() {
@@ -168,6 +215,7 @@ export class ProcessPage {
       this.presentToast('Image succesful selected.');
     }, (err) => {
       this.presentToast('Error while selecting image.');
+      loading.dismissAll();
     });
   }
  

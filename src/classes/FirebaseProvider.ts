@@ -17,7 +17,7 @@ export class FirebaseProvider {
   pathObject = Path.getInstance();
   log;
 
- 
+  
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of FirebaseProvider class
