@@ -7,10 +7,10 @@ import { Path } from './Path';
 declare var firebase: any;
 
 //CLASS
-export class FirebaseProvider {
+export class FirebaseDatabase {
 
   //VARIABLE
-  static firebaseObject: FirebaseProvider;
+  static firebaseObject: FirebaseDatabase;
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
   userObject = User.getInstance();
@@ -25,7 +25,7 @@ export class FirebaseProvider {
    **/
   public static getInstance() {
     if(!this.firebaseObject){
-      this.firebaseObject = new FirebaseProvider();
+      this.firebaseObject = new FirebaseDatabase();
     }
     return this.firebaseObject;
   }

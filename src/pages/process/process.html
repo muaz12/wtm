@@ -14,6 +14,7 @@
         <div class="card-description"><br>Firebase Log = {{datafirebase}}</div>
         <div class="card-description"><br>Database Log = {{dataDatabase}}</div>
         <div class="card-description"><br>Trace Log = {{log}}</div>
+        <div class="card-description"><br>Storage Log = {{storage}}</div>
       </div>
     </ion-card>
     <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
@@ -21,9 +22,12 @@
     <button ion-button block color="dark" large (click)="databaseObject.insertDataResult(ntu)">Insert Database</button>
     <button ion-button block color="dark" large (click)="databaseObject.readDataResult()">Read Database</button>
     <button ion-button block color="dark" large (click)="databaseObject.deleteDataResult()">Delete Database</button>
-    <button ion-button block color="dark" large (click)="firebaseObject.pushDataToFirebase(ntu)">Insert Firebase</button>
+    <button ion-button block color="dark" large (click)="firebaseDatabaseObject.pushDataToFirebase(ntu)">Insert Firebase</button>
     <button ion-button block color="dark" large (click)="readFirebase()">Read Firebase</button>
     <button ion-button block color="dark" large (click)="update()">Update Firebase</button>
     <button ion-button block color="dark" large (click)="remove()">Remove Firebase</button>
+    <button ion-button block color="dark" large (click)="upload()">Upload Storage</button>
+    <button ion-button block color="dark" large (click)="download()">Download Storage</button>
+    <button ion-button block color="dark" large (click)="delete()">Delete Storage</button>
     <button ion-button block color="dark" large (click)="updateLog()">Log</button>
 </ion-content>

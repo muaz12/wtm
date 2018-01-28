@@ -7,11 +7,12 @@ import { Transfer } from '@ionic-native/transfer';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import getPixels from "get-pixels";
+import { FirebaseDatabase } from '../../classes/FirebaseDatabase';
+import { FirebaseStorage } from '../../classes/FirebaseStorage';
 import { DatabaseHandler } from '../../classes/DatabaseHandler';
 import { LocationHandler } from '../../classes/LocationHandler';
 import { Dates } from '../../classes/Dates';
 import { Path } from '../../classes/Path';
-import { FirebaseProvider } from '../../classes/FirebaseProvider';
 
 declare var cordova: any;
 declare var firebase: any;
@@ -26,7 +27,8 @@ declare var firebase: any;
 export class ProcessPage {
 
   //VARIABLE
-  firebaseObject = FirebaseProvider.getInstance();
+  firebaseDatabaseObject = FirebaseDatabase.getInstance();
+  firebaseStorageObject = FirebaseStorage.getInstance();
   databaseObject = DatabaseHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
@@ -35,7 +37,8 @@ export class ProcessPage {
   ntu:number = 0;
   dataDatabase:string = 'null';
   log: string = 'null';
-  datafirebase: number[];
+  datafirebase:string = 'null';
+  storage:string = 'null';
 
 
   //CONSTRUCTOR
@@ -44,22 +47,33 @@ export class ProcessPage {
               public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController,
               public alertCtrl: AlertController) { 
                 this.createDirectory();
-                //this.databaseObject.createTableResult();
-                //this.databaseObject.createTableUser();
+                this.databaseObject.createTableResult();
+                this.databaseObject.createTableUser();
               }
 
-  public readDatabase() {
-    this.dataDatabase = this.dataDatabase + ' @ ' + this.databaseObject.log;
-    this.dataDatabase = this.dataDatabase + ' @ ' + this.databaseObject.readDataResult();
-  }
 
   public readFirebase() {
-    this.datafirebase = this.pullDataFromFirebase();
+    this.datafirebase = this.datafirebase + ' @ ' + this.pullDataFromFirebase();
   }
 
   public updateLog() {
-    this.dataDatabase = this.dataDatabase + ' @@ ' + this.databaseObject.getLog();
+    this.storage = this.storage + ' @ ' + this.firebaseStorageObject.getLog();
+    this.dataDatabase = this.dataDatabase + ' @ ' + this.databaseObject.getLog();
     this.log += this.log + ' @ ';
+  }
+
+  public upload() {
+    this.firebaseStorageObject.uploadImage(this.lastImage);
+  }
+
+  public download() {
+    var fileName = this.datesObject.date + '.jpg';
+    this.firebaseStorageObject.dowloadImage(fileName);
+  }
+
+  public delete() {
+    var fileName = this.datesObject.date + '.jpg';
+    this.firebaseStorageObject.deleteImage(fileName);
   }
  
   public pullDataFromFirebase() : number[] { 
@@ -111,13 +125,13 @@ export class ProcessPage {
 
   public remove() {
     var date = this.datesObject.date;
-    this.firebaseObject.removeDataFromFirebase(date);
+    this.firebaseDatabaseObject.removeDataFromFirebase(date);
   }
 
   public update() {
     var date = this.datesObject.date;
     var ntu = 111;
-    this.firebaseObject.updateDataInFirebase(date, ntu);
+    this.firebaseDatabaseObject.updateDataInFirebase(date, ntu);
   }
 
 
