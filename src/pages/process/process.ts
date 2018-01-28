@@ -39,7 +39,7 @@ export class ProcessPage {
   log: string = 'null';
   datafirebase:string = 'null';
   storage:string = 'null';
-  someTextUrl;
+  someTextUrl:string = 'nullnull';
 
 
   //CONSTRUCTOR
@@ -54,7 +54,7 @@ export class ProcessPage {
               }
 
               public getSomeText() {
-                firebase.storage().ref().getDownloadURL()
+                firebase.storage().ref('Water Turbidity Meter/Images').getDownloadURL()
                   .then(response => {
                     this.someTextUrl = response;
                     this.log = this.log + ', Successful connect storage firebase ,';

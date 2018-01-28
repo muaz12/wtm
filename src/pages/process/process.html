@@ -11,11 +11,9 @@
       <div class="col col-33">
         <img  class="full-image" src="{{lastImage}}" style="width: 100%" [hidden]="lastImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
-        <div class="card-description"><br>Firebase Log = {{datafirebase}}</div>
         <div class="card-description"><br>Database Log = {{dataDatabase}}</div>
-        <div class="card-description"><br>Trace Log = {{log}}</div>
         <div class="card-description"><br>Storage Log = {{storage}}</div>
-        <div class="card-description"><br><a href="{{someTextUrl}}">Get some text there</a></div>
+        div class="card-description"><br>Storage Log = {{someTextUrl}}</div>
       </div>
     </ion-card>
     <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
