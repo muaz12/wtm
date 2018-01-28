@@ -39,6 +39,7 @@ export class ProcessPage {
   log: string = 'null';
   datafirebase:string = 'null';
   storage:string = 'null';
+  someTextUrl;
 
 
   //CONSTRUCTOR
@@ -49,6 +50,16 @@ export class ProcessPage {
                 this.createDirectory();
                 this.databaseObject.createTableResult();
                 this.databaseObject.createTableUser();
+                this.getSomeText();
+              }
+
+              public getSomeText() {
+                firebase.storage().ref().getDownloadURL()
+                  .then(response => {
+                    this.someTextUrl = response;
+                    this.log = this.log + ', Successful connect storage firebase ,';
+                  })
+                  .catch(error => this.log = this.log + ', Error connect storage firebase ,')
               }
 
 
