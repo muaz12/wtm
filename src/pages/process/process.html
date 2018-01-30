@@ -13,10 +13,10 @@
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
         <div class="card-description"><br>Database Log = {{dataDatabase}}</div>
         <div class="card-description"><br>Storage Log = {{storage}}</div>
-        div class="card-description"><br>Storage Log = {{someTextUrl}}</div>
+        <div class="card-description"><br><a href="{{someTextUrl}}">Link = {{someTextUrl}}</a></div>
       </div>
     </ion-card>
-    <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
+    <button ion-button block color="secondary" (click)="presentToast('problem maaa')">Please Select Image!</button>
     <button ion-button block color="dark" large (click)="calculate()">Start</button>
     <button ion-button block color="dark" large (click)="databaseObject.insertDataResult(ntu)">Insert Database</button>
     <button ion-button block color="dark" large (click)="databaseObject.readDataResult()">Read Database</button>
