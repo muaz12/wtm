@@ -22,7 +22,7 @@ declare var firebase: any;
   selector: 'page-process',
   templateUrl: 'process.html'
 })
- 
+  
 //CLASS
 export class ProcessPage {
 

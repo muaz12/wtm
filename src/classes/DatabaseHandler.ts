@@ -23,7 +23,7 @@ export class DatabaseHandler {
     return this.log;
   }
 
-  
+   
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of DatabaseHandler class

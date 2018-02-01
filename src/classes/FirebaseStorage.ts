@@ -23,7 +23,7 @@ export class FirebaseStorage {
       this.firebaseStorageObject = new FirebaseStorage();
     }
     return this.firebaseStorageObject;
-  }
+  } 
 
 
   /** 
