@@ -12,6 +12,7 @@ export class FirebaseStorage {
   directoryObject = DirectoryHandler.getInstance();
   datesObject = Dates.getInstance();
   uploadTask;
+  currentImage;
   log: string = 'storage';
 
 
@@ -39,7 +40,6 @@ export class FirebaseStorage {
    * Trigger when  : invoked by 
   **/
   public getInstanceOfStorage() {
-    this.log = this.log + ' , passed getInstanceOfStorage() , ';
     return firebase.storage().ref('Water Turbidity Meter/Images');
   }
 
@@ -50,28 +50,37 @@ export class FirebaseStorage {
    * Trigger when  : invoked by 
   **/
   public uploadImage(fileName) {
-    var file = this.directoryObject.convertToDataURL(fileName);
-    this.uploadTask = this.getInstanceOfStorage().child(fileName).putString(file, 'data_url').then(() => {
-                        console.log('Uploaded image!');
-                        this.log = this.log + ' , Uploaded Image , ';
-                      }).catch((err) => {
-                        console.log('Upload failed');
-                        this.log = this.log + ' , Upload failed , ';
-                      });
+    var file;
 
+    this.directoryObject.getFile().readAsDataURL(this.directoryObject.getPath(), fileName).then((data) => {
+      file = data;
+      
+      this.uploadTask = this.getInstanceOfStorage().child(fileName).putString(file, 'data_url').then(() => {
+        console.log('Uploaded image!');
+      }).catch((err) => console.log(err));
+
+      this.monitor();
+
+    }).catch((err) => console.log(err));
+  }
+
+
+  public monitor() {
     this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, function(snapshot) {
       
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
-      this.log = this.log + ' Upload is ' + progress + '% done ';
+      this.log = this.log + 'Upload is ' + progress + '% done';
 
       switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
+        case firebase.storage.TaskState.PAUSED: {
           console.log('Upload is paused');
           break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
+        }
+        case firebase.storage.TaskState.RUNNING: {
           console.log('Upload is running');
           break;
+        }
       }
     }, function(error) {
         this.log = this.log + ' , Upload failed , ';
@@ -134,25 +143,25 @@ export class FirebaseStorage {
 
 
   /** 
+   * Method Name   : getDowloadURL()
+   * Purpose       : to get the url of image stored in firebase storage
+   * Trigger when  : invoked by 
+  **/
+  public getDowloadURL(fileName){
+    this.getInstanceOfStorage().child('' + fileName).getDownloadURL().then((url) => {
+      this.currentImage = url;
+    }).catch((err) => console.log(err));
+  }
+
+
+  /** 
    * Method Name   : deleteImage()
    * Purpose       : to delete image in firebase storage
    * Trigger when  : invoked by 
   **/
   public deleteImage(fileName) {
-    this.getInstanceOfStorage().child('' + fileName).delete().then(function() {
-        console.log('Delete successful');
-        this.log = this.log + ' , Delete Image , ';
-      }).catch(function(error) {
-        console.log('Delete failed');
-        this.log = this.log + ' , Delete failed , ';
-      });
+    this.getInstanceOfStorage().child('' + fileName).delete()
+    .then(() => console.log('Delete successful'))
+    .catch((error) =>console.log('Delete failed'));
   }
-
-
-
-  
-
-
-
-
 }

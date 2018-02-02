@@ -55,32 +55,12 @@ export class ProcessPage {
   public updateLog() {
     this.dataDatabase = this.dataDatabase + this.databaseObject.getLog();
     this.storage = this.storage + this.firebaseStorageObject.getLog();
-  }
-
-  public upload() {
-    var fileName = this.datesObject.date + '.jpg';
-    this.firebaseStorageObject.uploadImage(fileName);
+    this.log = this.log + this.directoryObject.getLog();
   }
   
   public download() {
     var fileName = this.datesObject.date + '.jpg';
     this.firebaseStorageObject.dowloadImage(fileName);
-  }
-
-  public delete() {
-    var fileName = this.datesObject.date + '.jpg';
-    this.firebaseStorageObject.deleteImage(fileName);
-  }
-
-  public remove() {
-    var date = this.datesObject.date;
-    this.firebaseDatabaseObject.removeDataFromFirebase(date);
-  }
-
-  public update() {
-    var date = this.datesObject.date;
-    var ntu = 111;
-    this.firebaseDatabaseObject.updateDataInFirebase(date, ntu);
   }
  
   public pullDataFromFirebase() : number[] { 

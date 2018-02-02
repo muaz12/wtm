@@ -1,6 +1,5 @@
 
 import { LoadingController, AlertController, ToastController } from 'ionic-angular';
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 //PROVIDER
@@ -8,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class UiProvider {
 
   //CONSTRUCTOR
-  constructor(public http: HttpClient, public loadingCtrl: LoadingController, public alertCtrl: AlertController,
+  constructor(public loadingCtrl: LoadingController, public alertCtrl: AlertController,
               public toastCtrl: ToastController) {}
 
   

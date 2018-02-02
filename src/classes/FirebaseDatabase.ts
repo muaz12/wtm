@@ -1,5 +1,6 @@
 
 //REQUIRED LIBRARY AND DEPENDENCIES
+import { FirebaseStorage } from './FirebaseStorage';
 import { LocationHandler } from './LocationHandler';
 import { Dates } from './Dates';
 import { User } from './User';
@@ -11,6 +12,7 @@ export class FirebaseDatabase {
 
   //VARIABLE
   static firebaseObject: FirebaseDatabase;
+  firebaseStorageObject = FirebaseStorage.getInstance();
   directoryObject = DirectoryHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
@@ -66,7 +68,10 @@ export class FirebaseDatabase {
       date: this.datesObject.date, 
       url: '' + this.directoryObject.pathForImage()
     })
-    .then(_ => console.log('Data inserted'))
+    .then(_ => {
+      var fileName = this.datesObject.date + '.jpg';
+      this.firebaseStorageObject.uploadImage(fileName);
+    })
     .catch(err => console.log(err));
   }
 

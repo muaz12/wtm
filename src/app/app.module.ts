@@ -18,7 +18,6 @@ import { Camera } from '@ionic-native/camera';
 import { SQLite } from '@ionic-native/sqlite';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UiProvider } from '../providers/ui/ui';
-//import { Firebase } from '@ionic-native/firebase';
 
 @NgModule({
   declarations: [
@@ -48,10 +47,8 @@ import { UiProvider } from '../providers/ui/ui';
     Camera,
     SQLite,
     Geolocation,
-    //Firebase,
     FilePath,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    UiProvider,
     UiProvider
   ]
 })

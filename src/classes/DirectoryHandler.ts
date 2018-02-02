@@ -11,7 +11,12 @@ export class DirectoryHandler {
   static directoryObject: DirectoryHandler;
   datesObject = Dates.getInstance();
   path;
-  
+  log: string = 'directory';
+
+
+  public getLog() {
+      return this.log;
+  }
 
   /** 
    * Method Name   : getInstance()
@@ -97,19 +102,5 @@ export class DirectoryHandler {
   public pathForImage() {
     this.path = this.getPath() + this.getFileName();
     return this.path;
-  }
-
-
-  /** 
-   * Method Name   : convertToDataURL()
-   * Purpose       : to convert image to base64 formatted string
-   * Trigger when  : invoked by FirebaseStorage 
-  **/
-  public convertToDataURL(fileName){
-    var image;
-    this.getFile().readAsDataURL(this.getPath(), fileName).then((data) => {
-      image = data;
-    }).catch((err) => console.log(err));
-    return image;
   }
 }
