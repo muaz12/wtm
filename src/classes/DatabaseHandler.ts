@@ -1,10 +1,10 @@
 
 //REQUIRED DEPENDENCIES AND LIBRARIES
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { DirectoryHandler } from './DirectoryHandler';
 import { LocationHandler } from './LocationHandler';
 import { Dates } from './Dates';
 import { User } from './User';
-import { Path } from './Path';
 
 
 //CLASS
@@ -12,10 +12,10 @@ export class DatabaseHandler {
   
   //VARIABLE
   static databaseObject: DatabaseHandler;
+  directoryObject = DirectoryHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
   userObject = User.getInstance();
-  pathObject = Path.getInstance();
   log: string = '';
 
   public getLog() {
@@ -180,7 +180,7 @@ export class DatabaseHandler {
    **/
   public insertDataResult(ntu) {
     this.openDatabase().then((db: SQLiteObject) => {
-      var sqlStatement = 'INSERT INTO result VALUES("'+this.userObject.getUserName()+'", '+ntu+', '+this.locationObject.latitude+', '+this.locationObject.longitude+', '+this.datesObject.date+', "'+this.pathObject.pathForImage()+'")';
+      var sqlStatement = 'INSERT INTO result VALUES("'+this.userObject.getUserName()+'", '+ntu+', '+this.locationObject.latitude+', '+this.locationObject.longitude+', '+this.datesObject.date+', "'+this.directoryObject.pathForImage()+'")';
       db.executeSql(sqlStatement, {})
         .then(() => this.log = this.log + ', Data result inserted ,'/*console.log('Data result inserted')*/)
     .catch(e => this.log = this.log + ', Error inserted ,'/*console.log(e)*/);

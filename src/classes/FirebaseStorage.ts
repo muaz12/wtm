@@ -1,5 +1,7 @@
 
 //REQUIRED LIBRARY AND DEPENDENCIES
+import { DirectoryHandler } from './DirectoryHandler';
+import { Dates } from './Dates';
 declare var firebase: any;
 
 //CLASS
@@ -7,12 +9,17 @@ export class FirebaseStorage {
 
   //VARIABLE
   static firebaseStorageObject: FirebaseStorage;
+  directoryObject = DirectoryHandler.getInstance();
+  datesObject = Dates.getInstance();
   uploadTask;
   log: string = 'storage';
+
 
   public getLog() {
       return this.log;
   }
+
+
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of FirebaseStorage class
@@ -42,11 +49,12 @@ export class FirebaseStorage {
    * Purpose       : to upload image to firebase storage
    * Trigger when  : invoked by 
   **/
-  public uploadImage(file) {
-    this.uploadTask = this.getInstanceOfStorage().put(file).then(function(snapshot) {
+  public uploadImage(fileName) {
+    var file = this.directoryObject.convertToDataURL(fileName);
+    this.uploadTask = this.getInstanceOfStorage().child(fileName).putString(file, 'data_url').then(() => {
                         console.log('Uploaded image!');
                         this.log = this.log + ' , Uploaded Image , ';
-                      }).catch(function(error) {
+                      }).catch((err) => {
                         console.log('Upload failed');
                         this.log = this.log + ' , Upload failed , ';
                       });
@@ -55,6 +63,7 @@ export class FirebaseStorage {
       
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
+      this.log = this.log + ' Upload is ' + progress + '% done ';
 
       switch (snapshot.state) {
         case firebase.storage.TaskState.PAUSED: // or 'paused'
@@ -67,10 +76,8 @@ export class FirebaseStorage {
     }, function(error) {
         this.log = this.log + ' , Upload failed , ';
         console.log('Upload failed');
-  }, function() {
-    var downloadURL = this.uploadTask.snapshot.downloadURL;
-  });
-}
+    });
+  }
 
 
   /** 

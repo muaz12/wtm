@@ -3,7 +3,7 @@
 import { LocationHandler } from './LocationHandler';
 import { Dates } from './Dates';
 import { User } from './User';
-import { Path } from './Path';
+import { DirectoryHandler } from './DirectoryHandler';
 declare var firebase: any;
 
 //CLASS
@@ -11,10 +11,10 @@ export class FirebaseDatabase {
 
   //VARIABLE
   static firebaseObject: FirebaseDatabase;
+  directoryObject = DirectoryHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
   userObject = User.getInstance();
-  pathObject = Path.getInstance();
   log;
 
   
@@ -64,7 +64,7 @@ export class FirebaseDatabase {
       latitude: this.locationObject.latitude, 
       longitude: this.locationObject.longitude, 
       date: this.datesObject.date, 
-      url: '' + this.pathObject.pathForImage()
+      url: '' + this.directoryObject.pathForImage()
     })
     .then(_ => console.log('Data inserted'))
     .catch(err => console.log(err));
