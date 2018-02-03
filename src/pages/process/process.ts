@@ -41,15 +41,16 @@ export class ProcessPage {
   log: string = 'null';
   datafirebase:string = 'null';
   storage:string = 'null';
+  blobb;
 
 
   //CONSTRUCTOR
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public platform: Platform, public uiProvider: UiProvider) { 
-                this.directoryObject.createDirectory();
-                this.databaseObject.createTableResult();
-                this.databaseObject.createTableUser();
+                //this.directoryObject.createDirectory();
+                //this.databaseObject.createTableResult();
+                //this.databaseObject.createTableUser();
               }
 
   public updateLog() {
@@ -59,10 +60,74 @@ export class ProcessPage {
   }
   
   public download() {
-    var fileName = this.datesObject.date + '.jpg';
-    this.firebaseStorageObject.dowloadImage(fileName);
+    var fileName = '1517668755060.jpg';
+    this.log = this.log + ', passed download ,';
+    this.dowloadImage(fileName);
   }
+
+  public downloadD() {
+    this.log = this.log + ', passed downloadD ,';
+    this.log = this.log + 'blob check: ' + this.blobb;
+    this.createFile();
+  }
+
+  public dowloadImage(fileName) {
+    var blob = null;
+    var date = new Date();
+    this.log = this.log + ', dowloadImage(fileName) passed ,';
+
+    firebase.storage().ref('Water Turbidity Meter/Images').child('' + fileName).getDownloadURL().then(function(url) {
+      console.log(url);
+      var t = date.getTime();
+      console.log('date 1: ' + t);
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.open('GET', url, true);
+
+      xhr.onload = function(event) {
+        blob = xhr.response;
+        console.log('DONE: ' + xhr.status);
+        console.log('DONE: ' + xhr.readyState);
+
+        if(blob){ 
+          console.log('blob is not empty');
+          var date = new Date();
+          var d = date.getTime();
+          console.log('date 2: ' + d);
+          var dif = d-t;
+          console.log('diffrent: ' + dif);
+        }
+      };
  
+      xhr.send();
+    }).catch(function(error) {
+      console.log('Download failed');
+    });
+
+    setTimeout(function () {
+      this.blobb = blob;
+      console.log('blob ori: ' + this.blobb);
+      this.log = this.log + 'blob ori: ' + this.blobb;
+    }, 10000);
+  }
+
+  public createFile() {
+    this.log = this.log + ', Passed createfile ,' + this.blobb;
+    /*this.directoryObject.getFile().createFile(this.directoryObject.getPath(), 'saje.jpg', true).then(() => {
+      this.log = this.log + ', File create done ,';
+
+      this.directoryObject.getFile().writeFile(this.directoryObject.getPath(), 'saje.jpg', this.blobb, {replace: true}).then(() => {
+        this.log = this.log + ', File write done ,';
+      }).catch((err) => {
+        this.log = this.log + ', File write error ,';
+      });
+
+    }).catch((err) => {
+      this.log = this.log + ', File create error ,';
+    });*/
+    
+  }
+
   public pullDataFromFirebase() : number[] { 
     this.log = this.log + ', Entering pullDataFromFirebase() ,';
     var arrResult: number[];

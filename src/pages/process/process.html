@@ -10,7 +10,6 @@
     <ion-card >
       <div class="col col-33">
         <img  class="full-image" src="{{lastImage}}" style="width: 100%" [hidden]="lastImage === null"/>
-        <img  class="full-image" src="{{currentImage}}" style="width: 100%" [hidden]="currentImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
         <div class="card-description"><br>Database Log = {{dataDatabase}}</div>
         <div class="card-description"><br>Trace Logg = {{log}}</div>
@@ -25,5 +24,6 @@
     <button ion-button block color="dark" large (click)="firebaseDatabaseObject.pushDataToFirebase(ntu)">Insert Firebase</button>
     <button ion-button block color="dark" large (click)="readFirebase()">Read Firebase</button>
     <button ion-button block color="dark" large (click)="download()">Download Storage</button>
+    <button ion-button block color="dark" large (click)="downloadD()">Create File</button>
     <button ion-button block color="dark" large (click)="updateLog()">Log</button>
 </ion-content>
