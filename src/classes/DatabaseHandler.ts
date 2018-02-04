@@ -19,7 +19,6 @@ export class DatabaseHandler {
   log: string = '';
 
   public getLog() {
-    this.log = this.log + ', passed getLog ,'
     return this.log;
   }
 
@@ -65,7 +64,7 @@ export class DatabaseHandler {
   public createTableResult() {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'CREATE TABLE IF NOT EXISTS result(user VARCHAR(32), ntu DOUBLE(20,10), latitude DOUBLE(20,10), longitude DOUBLE(20,10), date DOUBLE(20,0), url VARCHAR(32))';
-      db.executeSql(sqlStatement, {}).then(() => this.log = this.log + ', database result .. created ,'/*console.log('Executed sql create statement for result')*/)
+      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement for result'))
       .catch(e => console.log(e));
      }).catch(e => console.log(e));
   }
@@ -79,7 +78,7 @@ export class DatabaseHandler {
   public createTableUser() {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'CREATE TABLE IF NOT EXISTS user(username VARCHAR(32), password VARCHAR(32))';
-      db.executeSql(sqlStatement, {}).then(() => this.log = this.log + ', database user .. created ,'/*console.log('Executed sql create statement for user')*/)
+      db.executeSql(sqlStatement, {}).then(() => console.log('Executed sql create statement for user'))
       .catch(e => console.log(e));
      }).catch(e => console.log(e));
   }
@@ -124,12 +123,11 @@ export class DatabaseHandler {
       db.executeSql('SELECT * FROM result', {}).then((data) => {
         if (data.rows.length > 0) {
           for (var i = 0; i < data.rows.length; i++) {
-            this.log = this.log + ', Data read database ,';
-            this.log = this.log +  data.rows.item(i).user + ', ' + data.rows.item(i).ntu + ', ' + data.rows.item(i).latitude + ', ' + data.rows.item(i).longitude + ', ' + data.rows.item(i).date + ', ' + data.rows.item(i).url;
+            this.log = this.log +  data.rows.item(i).user + ',' + data.rows.item(i).ntu + ',' + data.rows.item(i).latitude + ',' + data.rows.item(i).longitude + ',' + data.rows.item(i).date + ',' + data.rows.item(i).url;
           }
         }
-      }).catch(e => this.log = this.log + ', Data error ' + e/*console.log(e)*/);
-    }).catch(e => this.log = this.log + ', Data error ' + e /*console.log(e)*/);
+      }).catch(e => console.log(e));
+    }).catch(e => console.log(e));
   }
 
 
@@ -182,9 +180,9 @@ export class DatabaseHandler {
     this.openDatabase().then((db: SQLiteObject) => {
       var sqlStatement = 'INSERT INTO result VALUES("'+this.userObject.getUserName()+'", '+ntu+', '+this.locationObject.latitude+', '+this.locationObject.longitude+', '+this.datesObject.date+', "'+this.directoryObject.pathForImage()+'")';
       db.executeSql(sqlStatement, {})
-        .then(() => this.log = this.log + ', Data result inserted ,'/*console.log('Data result inserted')*/)
-    .catch(e => this.log = this.log + ', Error inserted ,'/*console.log(e)*/);
-    }).catch(e => this.log = this.log + ', Error inserted ,'/*console.log(e)*/);
+        .then(() => console.log('Data result inserted'))
+    .catch(e => console.log(e));
+    }).catch(e => console.log(e));
   }
 
 

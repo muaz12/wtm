@@ -1,8 +1,12 @@
 
 //REQUIRED LIBRARY AND DEPENDENCIES
 import { DirectoryHandler } from './DirectoryHandler';
-import { Dates } from './Dates';
+
+declare var cordova: any;
 declare var firebase: any;
+declare global {
+  interface Window { resolveLocalFileSystemURL: any }
+}
 
 //CLASS
 export class FirebaseStorage {
@@ -10,21 +14,14 @@ export class FirebaseStorage {
   //VARIABLE
   static firebaseStorageObject: FirebaseStorage;
   directoryObject = DirectoryHandler.getInstance();
-  datesObject = Dates.getInstance();
   uploadTask;
-  currentImage;
-  log: string = 'storage';
-
-
-  public getLog() {
-      return this.log;
-  }
+  url;
 
 
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of FirebaseStorage class
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by FirebaseDatabase
    **/
   public static getInstance() {
     if(!this.firebaseStorageObject){
@@ -37,7 +34,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : getInstanceOfStorage()
    * Purpose       : to get the reference of firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by uploadImage(fileName), downloadImage(fileName), deleteImage(fileName)
   **/
   public getInstanceOfStorage() {
     return firebase.storage().ref('Water Turbidity Meter/Images');
@@ -47,7 +44,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : uploadImage()
    * Purpose       : to upload image to firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by pushDataToFirebase(ntu)
   **/
   public uploadImage(fileName) {
     var file;
@@ -65,6 +62,11 @@ export class FirebaseStorage {
   }
 
 
+  /** 
+   * Method Name   : monitor()
+   * Purpose       : to monitor the progress of uploading the image to firebase storage
+   * Trigger when  : invoked by uploadImage()
+  **/
   public monitor() {
     this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, function(snapshot) {
       
@@ -92,7 +94,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : pauseUpload()
    * Purpose       : to pause the upload of image to firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by any method
   **/
   public pauseUpload() {
     this.uploadTask.pause();
@@ -102,7 +104,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : resumeUpload()
    * Purpose       : to resume the upload of image to firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by any method
   **/
   public resumeUpload() {
     this.uploadTask.resume();
@@ -112,7 +114,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : cancelUpload()
    * Purpose       : to cancel the upload of image to firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by any method
   **/
   public cancelUpload() {
     this.uploadTask.cancel();
@@ -122,34 +124,49 @@ export class FirebaseStorage {
   /** 
    * Method Name   : dowloadImage()
    * Purpose       : to download image from firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by FirebaseDatabase pullDataFromFirebase()
   **/
   public dowloadImage(fileName) {
+    var blob = null;
+    
     this.getInstanceOfStorage().child('' + fileName).getDownloadURL().then(function(url) {
-        var xhr = new XMLHttpRequest();
-        xhr.responseType = 'blob';
-        xhr.onload = function(event) {
-          var blob = xhr.response;
-        };
-        xhr.open('GET', url);
-        xhr.send();
-        this.log = this.log + ' , Dowloaded Image , ';
+      
+      var xhr = new XMLHttpRequest();
+      xhr.responseType = 'blob';
+      xhr.open('GET', url, true);
 
-      }).catch(function(error) {
-        this.log = this.log + ' , Dowload failed , ';
-        console.log('Download failed');
-      });
+      xhr.onload = function(event) {
+        blob = xhr.response;
+        
+        if(blob){ 
+          var folderPath = cordova.file.externalRootDirectory + 'Water Turbidity Meter/Images/';
+          window.resolveLocalFileSystemURL(folderPath, function(dir) {
+            dir.getFile(fileName, {create:true}, function(file) {
+              file.createWriter(function(fileWriter) {
+              fileWriter.write(blob);
+              }, function(){
+                console.log('Unable to save file in path ' + folderPath);
+              });
+            });
+          });
+        }
+      };
+      xhr.send();
+
+    }).catch(function(error) {
+      console.log('Download failed');
+    });
   }
 
 
   /** 
    * Method Name   : getDowloadURL()
    * Purpose       : to get the url of image stored in firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by any method
   **/
   public getDowloadURL(fileName){
     this.getInstanceOfStorage().child('' + fileName).getDownloadURL().then((url) => {
-      this.currentImage = url;
+      this.url = url;
     }).catch((err) => console.log(err));
   }
 
@@ -157,7 +174,7 @@ export class FirebaseStorage {
   /** 
    * Method Name   : deleteImage()
    * Purpose       : to delete image in firebase storage
-   * Trigger when  : invoked by 
+   * Trigger when  : invoked by FirebaseDatabase removeDataFromFirebase(date)
   **/
   public deleteImage(fileName) {
     this.getInstanceOfStorage().child('' + fileName).delete()

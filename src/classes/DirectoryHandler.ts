@@ -21,7 +21,7 @@ export class DirectoryHandler {
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of Path class
-   * Trigger when  : invoked by DatabaseHandler, ProcessPage
+   * Trigger when  : invoked by DatabaseHandler, FirebaseDatabase, ProcessPage
    **/
   public static getInstance() {
     if(!this.directoryObject){
@@ -60,7 +60,7 @@ export class DirectoryHandler {
    * Method Name   : createDirectory()
    * Purpose       : to create directory "Water Turbidity Meter & Images" if checkDirectory() 
    *                 returns false which means the directory need to be created since it does not exist.
-   * Trigger when  : invoked by constructor()
+   * Trigger when  : invoked by ProcessPage constructor()
   **/
   public createDirectory() {
     if(!this.checkDirectory()) {

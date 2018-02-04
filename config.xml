@@ -90,8 +90,8 @@
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.0" />
     <plugin name="cordova-plugin-filepath" spec="^1.1.0" />
     <plugin name="cordova-plugin-media-capture" spec="^2.0.0" />
-    <allow-navigation href="http://192.168.214.1:8100" />
-    <allow-navigation href="http://192.168.232.1:8100" />
+    <allow-navigation href="http://192.168.43.173:8100" />
+    <allow-navigation href="http://192.168.43.173" />
     <allow-navigation href="http://localhost:8100" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.0" />

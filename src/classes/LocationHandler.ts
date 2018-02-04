@@ -14,7 +14,7 @@ export class LocationHandler {
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of LocationHandler class
-   * Trigger when  : invoked by DatabaseHandler insertData(), ProcessPage
+   * Trigger when  : invoked by DatabaseHandler, FirebaseDatabase, ProcessPage
    **/
   public static getInstance() {
     if(!this.locationObject){

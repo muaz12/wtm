@@ -10,7 +10,7 @@ export class Dates {
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of Dates class
-   * Trigger when  : invoked by ProcessPage, DatabaseHandler
+   * Trigger when  : invoked by ProcessPage, DatabaseHandler, FirebaseDatabase
    **/
   public static getInstance() {
     if(!this.dateObject){
