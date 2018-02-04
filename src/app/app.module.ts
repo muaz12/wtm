@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { ProcessPage } from '../pages/process/process';
 import { ResultPage } from '../pages/result/result';
 import { HomePage } from '../pages/home/home';
+import { MapsPage } from '../pages/maps/maps';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -25,6 +26,7 @@ import { UiProvider } from '../providers/ui/ui';
     ProcessPage,
     ResultPage,
     HomePage,
+    MapsPage,
     TabsPage
   ],
   imports: [
@@ -37,6 +39,7 @@ import { UiProvider } from '../providers/ui/ui';
     ProcessPage,
     ResultPage,
     HomePage,
+    MapsPage,
     TabsPage
   ],
   providers: [

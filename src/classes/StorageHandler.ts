@@ -26,12 +26,32 @@ export class StorageHandler {
   }
 
 
+  /** 
+   * Method Name   : checkDataExistence()
+   * Purpose       : to check the data stored in Firebase Database and SQLite Database. 
+   * Trigger when  : invoked by  
+   **/
   public checkDataExistence() {
 
   }
 
 
-  public updateDataSets() {
+  /** 
+   * Method Name   : updateDataFirebase()
+   * Purpose       : to update data stored in Firebase Database. 
+   * Trigger when  : invoked by  
+   **/
+  public updateDataFirebase() {
+
+  }
+
+
+  /** 
+   * Method Name   : updateDataSQLite()
+   * Purpose       : to update data stored in SQLite Database. 
+   * Trigger when  : invoked by  
+   **/
+  public updateDataSQLite() {
 
   }
 }
