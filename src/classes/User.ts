@@ -10,7 +10,7 @@ export class User {
     /** 
      * Method Name   : getInstance()
      * Purpose       : to get the instance of User class
-     * Trigger when  : invoked by DatabaseHandler,, FirebaseDatabase
+     * Trigger when  : invoked by SQLiteHandler, FirebaseDatabase
      **/
     public static getInstance() {
       if(!this.userObject){

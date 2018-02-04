@@ -21,7 +21,7 @@ export class DirectoryHandler {
   /** 
    * Method Name   : getInstance()
    * Purpose       : to get the instance of Path class
-   * Trigger when  : invoked by DatabaseHandler, FirebaseDatabase, ProcessPage
+   * Trigger when  : invoked by SQLiteHandler, FirebaseDatabase, ProcessPage
    **/
   public static getInstance() {
     if(!this.directoryObject){
