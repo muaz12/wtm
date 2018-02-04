@@ -8,10 +8,10 @@ import { User } from './User';
 
 
 //CLASS
-export class DatabaseHandler {
+export class SQLiteHandler {
   
   //VARIABLE
-  static databaseObject: DatabaseHandler;
+  static sqliteObject: SQLiteHandler;
   directoryObject = DirectoryHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   datesObject = Dates.getInstance();
@@ -29,10 +29,10 @@ export class DatabaseHandler {
    * Trigger when  : invoked by ProcessPage 
    **/
   public static getInstance() {
-    if(!this.databaseObject){
-      this.databaseObject = new DatabaseHandler();
+    if(!this.sqliteObject){
+      this.sqliteObject = new SQLiteHandler();
     }
-    return this.databaseObject;
+    return this.sqliteObject;
   }
 
 

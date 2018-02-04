@@ -139,10 +139,10 @@ export class FirebaseDatabase {
   **/
   public removeDataFromFirebase(date) {
     firebase.database().ref('result/' + date).remove()
-    .then(function() { 
+    .then(() => { 
       var fileName = date + '.jpg';
       this.firebaseStorageObject.deleteImage(fileName);
       console.log('Data removed'); 
-    }).catch(function(error) { console.log(error); });
+    }).catch((error) => { console.log(error); });
   }
 }

@@ -8,8 +8,7 @@ import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import getPixels from "get-pixels";
 import { FirebaseDatabase } from '../../classes/FirebaseDatabase';
-import { FirebaseStorage } from '../../classes/FirebaseStorage';
-import { DatabaseHandler } from '../../classes/DatabaseHandler';
+import { SQLiteHandler } from '../../classes/SQLiteHandler';
 import { LocationHandler } from '../../classes/LocationHandler';
 import { DirectoryHandler } from '../../classes/DirectoryHandler';
 import { UiProvider } from '../../providers/ui/ui';
@@ -27,8 +26,7 @@ export class ProcessPage {
 
   //VARIABLE
   firebaseDatabaseObject = FirebaseDatabase.getInstance();
-  firebaseStorageObject = FirebaseStorage.getInstance();
-  databaseObject = DatabaseHandler.getInstance();
+  sqliteObject = SQLiteHandler.getInstance();
   locationObject = LocationHandler.getInstance();
   directoryObject = DirectoryHandler.getInstance();
   datesObject = Dates.getInstance();
@@ -42,22 +40,12 @@ export class ProcessPage {
               private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public platform: Platform, public uiProvider: UiProvider) { 
                 this.directoryObject.createDirectory();
-                this.databaseObject.createTableResult();
-                this.databaseObject.createTableUser();
+                this.sqliteObject.createTableResult();
+                this.sqliteObject.createTableUser();
               }
 
   public updateLog() {
-    this.log = this.log + this.databaseObject.getLog();
-  }
-  
-  public download() {
-    var fileName = '1517585702970.jpg';
-    this.firebaseStorageObject.dowloadImage(fileName);
-  }
-
-  public remove() {
-    var date = this.datesObject.date;
-    this.firebaseDatabaseObject.removeDataFromFirebase(date);
+    this.log = this.log + this.sqliteObject.getLog();
   }
 
   public pullDataFromFirebase() : number[] { 
@@ -202,7 +190,7 @@ export class ProcessPage {
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   public copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.copyFile(namePath, currentName, this.directoryObject.getPath(), newFileName).then(success => {
+    this.file.moveFile(namePath, currentName, this.directoryObject.getPath(), newFileName).then(success => {
       this.lastImage = this.directoryObject.pathForImage();
     }, error => {
       this.uiProvider.presentToast('Error while storing image');
