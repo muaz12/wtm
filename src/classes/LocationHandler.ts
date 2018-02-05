@@ -7,8 +7,8 @@ export class LocationHandler {
 
   //VARIABLES
   static locationObject: LocationHandler;
-  latitude;
-  longitude;
+  latitude = 0;
+  longitude = 0;
 
 
   /** 
@@ -40,7 +40,6 @@ export class LocationHandler {
    * Trigger when  : invoked by ProcessPage createFileName()
    **/
   public getLatitude() {
-    this.latitude = 123.432;
     return this.latitude;
   }
 
@@ -51,7 +50,6 @@ export class LocationHandler {
    * Trigger when  : invoked by ProcessPage createFileName()
    **/
   public getLongitude() {
-    this.longitude = 321.33;
     return this.longitude;
   }
 
@@ -62,7 +60,7 @@ export class LocationHandler {
    * Trigger when  : invoked by 
    **/
   public getCoordinate() {
-      return '(' + this.getLatitude + ',' + this.getLongitude + ')';
+      return '(' + this.getLatitude() + ',' + this.getLongitude() + ')';
   }
 
 

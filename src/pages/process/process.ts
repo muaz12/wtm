@@ -5,7 +5,6 @@ import { ActionSheetController, Platform, NavController } from 'ionic-angular';
 import { FilePath } from '@ionic-native/file-path';
 import { Transfer } from '@ionic-native/transfer';
 import { Camera } from '@ionic-native/camera';
-import { File } from '@ionic-native/file';
 import getPixels from "get-pixels";
 import { FirebaseDatabase } from '../../classes/FirebaseDatabase';
 import { SQLiteHandler } from '../../classes/SQLiteHandler';
@@ -32,12 +31,12 @@ export class ProcessPage {
   datesObject = Dates.getInstance();
   lastImage: string = null;
   ntu:number = 0;
-  log: string = 'null';
+  log: number = 0;
 
 
   //CONSTRUCTOR
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, 
-              private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
+              private filePath: FilePath, public actionSheetCtrl: ActionSheetController, 
               public platform: Platform, public uiProvider: UiProvider) { 
                 this.directoryObject.createDirectory();
                 this.sqliteObject.createTableResult();
@@ -45,11 +44,11 @@ export class ProcessPage {
               }
 
   public updateLog() {
-    this.log = this.log + this.sqliteObject.getLog();
+   
   }
 
   public pullDataFromFirebase() : number[] { 
-    this.log = this.log + ', Entering pullDataFromFirebase() ,';
+    //this.log = this.log + ', Entering pullDataFromFirebase() ,';
     var arrResult: number[];
     arrResult.push(1111);
 
@@ -91,7 +90,7 @@ export class ProcessPage {
       this.log = this.log + ', error pull parent: ' + error2;
     });*/
     //loading.dismissAll();
-    this.log = this.log + ', Exiting pullDataFromFirebase() ,';
+    //this.log = this.log + ', Exiting pullDataFromFirebase() ,';
     return arrResult;
   }
 
@@ -178,8 +177,10 @@ export class ProcessPage {
   **/
   public createFileName() {
     var date = this.datesObject.getDates();
-    this.locationObject.getLatitude();
-    this.locationObject.getLongitude();
+    this.locationObject.getGeolocation().getCurrentPosition().then((position) => {
+      this.locationObject.latitude = position.coords.latitude;
+      this.locationObject.longitude = position.coords.longitude;
+    }, (err) => console.log(err));
     return date + '.jpg';
   }
 
@@ -190,7 +191,7 @@ export class ProcessPage {
    * Trigger when  : invoked by takePicture(sourceType)
   **/
   public copyFileToLocalDir(namePath, currentName, newFileName) {
-    this.file.moveFile(namePath, currentName, this.directoryObject.getPath(), newFileName).then(success => {
+    this.directoryObject.getFile().moveFile(namePath, currentName, this.directoryObject.getPath(), newFileName).then(success => {
       this.lastImage = this.directoryObject.pathForImage();
     }, error => {
       this.uiProvider.presentToast('Error while storing image');
@@ -230,6 +231,7 @@ export class ProcessPage {
       }
       var widthMean1 = widthSum1/nx;
       var ntu1 = 3.80*(widthMean1)+5.35;
+      this.log = widthMean1;
       this.ntu = ntu1;
       this.uiProvider.showAlert('Result', this.ntu + ' NTU');
     })
