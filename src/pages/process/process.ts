@@ -32,6 +32,7 @@ export class ProcessPage {
   lastImage: string = null;
   ntu:number = 0;
   log: number = 0;
+  lat;
 
 
   //CONSTRUCTOR
@@ -44,7 +45,7 @@ export class ProcessPage {
               }
 
   public updateLog() {
-   
+   this.lat = this.sqliteObject.getLog();
   }
 
   public pullDataFromFirebase() : number[] { 

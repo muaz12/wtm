@@ -12,10 +12,12 @@
         <img  class="full-image" src="{{lastImage}}" style="width: 100%" [hidden]="lastImage === null"/>
         <div class="card-description"><br>Water Turbidity = {{ntu}}</div>
         <div class="card-description"><br>MGI = {{log}}</div>
+        <div class="card-description"><br>Log = {{lat}}</div>
       </div>
     </ion-card>
     <button ion-button block color="secondary" (click)="presentActionSheet()">Please Select Image!</button>
     <button ion-button block color="dark" large (click)="calculate()">Start</button>
+    <button ion-button block color="dark" large (click)="sqliteObject.insertDummyData()">Insert Dummy Data</button>
     <button ion-button block color="dark" large (click)="sqliteObject.insertDataResult(ntu)">Insert Database</button>
     <button ion-button block color="dark" large (click)="sqliteObject.readDataResult()">Read Database</button>
     <button ion-button block color="dark" large (click)="sqliteObject.deleteDataResult()">Delete Database</button>
